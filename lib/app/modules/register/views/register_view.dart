@@ -7,10 +7,10 @@ import 'package:litera/app/core/widgets/custom_button.dart';
 import 'package:litera/app/core/widgets/custom_text_field.dart';
 import 'package:litera/app/routes/app_pages.dart';
 
-import '../controllers/login_controller.dart';
+import '../controllers/register_controller.dart';
 
-class LoginView extends GetView<LoginController> {
-  const LoginView({super.key});
+class RegisterView extends GetView<RegisterController> {
+  const RegisterView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +52,19 @@ class LoginView extends GetView<LoginController> {
 
               const SizedBox(height: 48),
 
+              // Name field
+              Obx(
+                () => CustomTextField(
+                  hintText: AutofillHints.name,
+                  icon: Icons.person_outline,
+                  controller: controller.nameC,
+                  keyboardType: TextInputType.emailAddress,
+                  errorText: controller.emailError.value,
+                ),
+              ),
+
+            const SizedBox(height: 18),
+
               // Email field
               Obx(
                 () => CustomTextField(
@@ -63,7 +76,7 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 18),
 
               // Password field
               Obx(
@@ -94,37 +107,37 @@ class LoginView extends GetView<LoginController> {
 
               const SizedBox(height: 32),
 
-              // Login button
+              // Register button
               Obx(
                 () => CustomButton(
-                  text: "Masuk",
+                  text: "Daftar",
                   onPressed:
                       (controller.isLoading.value ||
                           !controller.isFormValid.value)
                       ? null
-                      : controller.login,
+                      : controller.register,
                   isLoading: controller.isLoading.value,
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // Register link
+              // Login link
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.REGISTER);
+                  Get.toNamed(Routes.LOGIN);
                 },
                 child: RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Belum punya akun? ',
+                        text: 'Sudah punya akun? ',
                         style: AppTextStyles.bodySmall.copyWith(
                           color: Colors.black,
                         ),
                       ),
                       TextSpan(
-                        text: 'Daftar',
+                        text: 'Masuk',
                         style: AppTextStyles.bodySmall.copyWith(
                           color: AppColors.primaryNormal,
                           fontWeight: FontWeight.w600,

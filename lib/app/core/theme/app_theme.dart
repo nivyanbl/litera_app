@@ -27,7 +27,7 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryNormal,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: AppColors.grayDarkHover,
+          disabledBackgroundColor: AppColors.grayLightHover,
           disabledForegroundColor: AppColors.grayLightActive,
           textStyle: const TextStyle(
             fontWeight: FontWeight.w600,

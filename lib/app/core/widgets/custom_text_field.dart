@@ -39,7 +39,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: _isObscure, 
       keyboardType: widget.keyboardType,
       style: const TextStyle(
-        fontFamily: 'Poppins',
         fontSize: 14,
         color: AppColors.grayDarker,
       ),
