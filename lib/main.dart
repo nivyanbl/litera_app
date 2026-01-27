@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
+import 'app/core/theme/app_theme.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+  await dotenv.load(fileName: ".env.dev");
+
   runApp(
     GetMaterialApp(
-      title: "Application",
+      debugShowCheckedModeBanner: false,
+      title: "litera",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+
+      theme: AppTheme.lightTheme,
     ),
   );
 }
