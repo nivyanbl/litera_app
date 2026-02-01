@@ -119,7 +119,7 @@ class LoginView extends GetView<LoginController> {
                     children: [
                       TextSpan(
                         text: 'Belum punya akun? ',
-                        style: AppTextStyles.bodySmall.copyWith(
+                        style: AppTextStyles.bodyMedium.copyWith(
                           color: Colors.black,
                         ),
                       ),

@@ -30,7 +30,7 @@ class RegisterView extends GetView<RegisterController> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: const DecorationImage(
-                    image: AssetImage('assets/images/logo.png'),
+                    image: AssetImage('assets/images/logo.png'),                    
                   ),
                 ),
               ),
