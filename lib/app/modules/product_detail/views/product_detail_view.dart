@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:litera/app/core/widgets/app_icon.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -52,12 +53,12 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: AppIcon(icon: Icons.arrow_back,),
           onPressed: () => Get.back(),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+            icon: AppIcon(icon: Icons.shopping_cart_outlined,),
             onPressed: () {},
           ),
           const SizedBox(width: 8),

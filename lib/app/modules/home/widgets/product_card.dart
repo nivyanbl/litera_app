@@ -27,13 +27,13 @@ class ProductCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.grey.shade300),
+            border: Border.all(color: Colors.red),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 170,
+                height: 190,
                 width: double.infinity,
                 padding: const EdgeInsets.all(8),
                 child: Stack(
@@ -103,9 +103,9 @@ class ProductCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     SizedBox(
-                      height: 38,
+                      height: 30,
                       child: Text(
                         product.title,
                         maxLines: 2,
@@ -118,7 +118,7 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
 
                     // Harga
                     Text(
@@ -128,8 +128,6 @@ class ProductCard extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-
-                    const SizedBox(height: 8),
                   ],
                 ),
               ),
