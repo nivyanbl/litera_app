@@ -5,6 +5,7 @@ import 'package:litera/app/core/theme/app_colors.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
 import 'package:litera/app/core/widgets/custom_button.dart';
 import 'package:litera/app/core/widgets/custom_text_field.dart';
+import 'package:litera/app/core/widgets/auth_header.dart';
 import 'package:litera/app/routes/app_pages.dart';
 
 import '../controllers/register_controller.dart';
@@ -21,36 +22,8 @@ class RegisterView extends GetView<RegisterController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 150),
-
-              // Logo Litera
-              Container(
-                width: 250,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/logo.png'),                    
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 10),
-
-              // woman reading image
-              Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/woman_reading.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 48),
+              // Logo and Image Header
+              const AuthHeader(),
 
               // Name field
               Obx(
@@ -63,7 +36,7 @@ class RegisterView extends GetView<RegisterController> {
                 ),
               ),
 
-            const SizedBox(height: 18),
+              const SizedBox(height: 18),
 
               // Email field
               Obx(
@@ -143,7 +116,7 @@ class RegisterView extends GetView<RegisterController> {
                           fontWeight: FontWeight.w600,
                           decoration: TextDecoration.underline,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
