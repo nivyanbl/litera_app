@@ -27,7 +27,7 @@ class RegisterController extends GetxController {
     passwordC.addListener(_checkForm);
   }
 
-  void _checkForm(){
+  void _checkForm() {
     isFormValid.value =
         nameC.text.trim().isNotEmpty &&
         emailC.text.trim().isNotEmpty &&
@@ -51,6 +51,10 @@ class RegisterController extends GetxController {
     nameError.value = null;
     emailError.value = null;
     passwordError.value = null;
+
+    final args = Get.arguments as Map?;
+    final redirect = args?['redirect'] as String?;
+    final redirectArgs = args?['redirectArgs'];
 
     bool isValid = true;
     final name = nameC.text.trim();
@@ -80,7 +84,12 @@ class RegisterController extends GetxController {
     try {
       isLoading.value = true;
       await authRepository.register(name, email, password);
-       Get.offAllNamed(Routes.HOME);
+      if (redirect != null && redirect.isNotEmpty) {
+        Get.offNamed(redirect, arguments: redirectArgs);
+        return;
+      }
+
+      Get.offAllNamed(Routes.HOME);
     } catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '');
       final lower = message.toLowerCase();
@@ -93,7 +102,7 @@ class RegisterController extends GetxController {
         Get.snackbar("Gagal", message);
       }
     } finally {
-      isLoading.value = false; 
+      isLoading.value = false;
     }
   }
 }

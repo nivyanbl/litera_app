@@ -42,8 +42,9 @@ class ProductDetailImage extends StatelessWidget {
 
 class ProductDetailHeader extends StatelessWidget {
   final ProductModel product;
+  final VoidCallback? onLoveTap;
 
-  const ProductDetailHeader({super.key, required this.product});
+  const ProductDetailHeader({super.key, required this.product, this.onLoveTap});
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,10 @@ class ProductDetailHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Icon(Icons.favorite_border, color: Colors.black, size: 28),
+        GestureDetector(
+          onTap: onLoveTap,
+          child: Icon(Icons.favorite_border, color: Colors.black, size: 24,)
+        ),
       ],
     );
   }

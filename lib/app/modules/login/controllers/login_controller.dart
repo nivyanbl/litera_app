@@ -44,6 +44,10 @@ class LoginController extends GetxController {
     emailError.value = null;
     passwordError.value = null;
 
+    final args = Get.arguments as Map?;
+    final redirect = args?['redirect'] as String?;
+    final redirectArgs = args?['redirectArgs'];
+
     bool isValid = true;
     final email = emailC.text.trim();
     final password = passwordC.text;
@@ -66,12 +70,13 @@ class LoginController extends GetxController {
     isLoading.value = true;
     try {
       await authRepository.login(email, password);
-      
-      Get.back(result: true);
-      
-      if (!Get.previousRoute.contains('/product/')) {
-        Get.offAllNamed(Routes.HOME);
+
+      if (redirect != null && redirect.isNotEmpty) {
+        Get.offNamed(redirect, arguments: redirectArgs);
+        return;
       }
+
+      Get.offAllNamed(Routes.HOME);
     } catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '');
       final lower = message.toLowerCase();
@@ -84,7 +89,7 @@ class LoginController extends GetxController {
         Get.snackbar("Gagal", message);
       }
     } finally {
-      isLoading.value = false; 
+      isLoading.value = false;
     }
   }
 }

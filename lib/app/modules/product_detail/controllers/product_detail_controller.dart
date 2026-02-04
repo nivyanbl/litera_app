@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/storage/secure_storage.dart';
 import '../../../data/models/product_model.dart';
+import '../../../routes/app_pages.dart';
 
 class ProductDetailController extends GetxController {
   final isExpanded = false.obs;
@@ -32,6 +34,42 @@ class ProductDetailController extends GetxController {
   }
 
   void toggleExpanded() => isExpanded.value = !isExpanded.value;
+
+  Future<void> handleBuyNow() async {
+    if (!await _ensureLoggedIn()) return;
+  }
+
+  Future<void> handleAddToCart() async {
+    if (!await _ensureLoggedIn()) return;
+  }
+
+  Future<void> handleCartIcon() async {
+    if (!await _ensureLoggedIn()) return;
+  }
+
+  Future<void> handleLoveTap() async {
+    if (!await _ensureLoggedIn()) return;
+  }
+
+  Future<bool> _ensureLoggedIn() async {
+    final token = await SecureStorage.getToken();
+    if (token != null && token.isNotEmpty) return true;
+
+    Get.snackbar(
+      "Perlu login",
+      "Silakan login atau daftar untuk melanjutkan.",
+      snackPosition: SnackPosition.BOTTOM,
+    );
+
+    await Get.toNamed(
+      Routes.LOGIN,
+      arguments: {
+        'redirect': Routes.PRODUCT_DETAIL,
+        'redirectArgs': Get.arguments,
+      },
+    );
+    return false;
+  }
 
   String _resolveImageUrl(String? image, String? argUrl) {
     if (argUrl != null && argUrl.isNotEmpty) {

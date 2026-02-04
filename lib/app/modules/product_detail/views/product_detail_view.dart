@@ -26,7 +26,10 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   children: [
                     ProductDetailImage(imageUrl: imageUrl),
                     const SizedBox(height: 32),
-                    ProductDetailHeader(product: product),
+                    ProductDetailHeader(
+                      product: product,
+                      onLoveTap: controller.handleLoveTap,
+                    ),
                     const SizedBox(height: 20),
                     Obx(
                       () => ProductDetailDescription(
@@ -42,7 +45,10 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
               ),
             ),
-            ProductDetailBottomActions(onBuyNow: () {}, onAddToCart: () {}),
+            ProductDetailBottomActions(
+              onBuyNow: controller.handleBuyNow,
+              onAddToCart: controller.handleAddToCart,
+            ),
           ],
         ),
       ),
@@ -59,7 +65,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
       actions: [
         IconButton(
           icon: const AppIcon(icon: Icons.shopping_cart_outlined),
-          onPressed: () {},
+          onPressed: controller.handleCartIcon,
         ),
         const SizedBox(width: 8),
       ],
