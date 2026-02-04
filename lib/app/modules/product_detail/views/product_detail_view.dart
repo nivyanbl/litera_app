@@ -25,7 +25,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ProductDetailImage(imageUrl: imageUrl),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 34),
                     ProductDetailHeader(
                       product: product,
                       onLoveTap: controller.handleLoveTap,
