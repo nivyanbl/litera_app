@@ -32,16 +32,18 @@ class CategorySection extends StatelessWidget {
             ],
           ),
         ),
+        
         const SizedBox(height: 12),
+        
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
               _categoryChip("Novel"),
-              _categoryChip("Komik"),
-              _categoryChip("Pelajaran"),
-              _categoryChip("Biografi"),
+              _categoryChip("Buku"),
+              _categoryChip("Koran"),
+              _categoryChip("Majalah"),
             ],
           ),
         ),
@@ -51,20 +53,30 @@ class CategorySection extends StatelessWidget {
 
   Widget _categoryChip(String label, {bool isActive = false}) {
     return Container(
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      decoration: BoxDecoration(
-        color: isActive ? Colors.blue : Colors.white,
-        border: Border.all(
-          color: isActive ? Colors.blue : Colors.grey.shade300,
+      width: 125, 
+      height: 40, 
+      margin: const EdgeInsets.only(right: 12), 
+      padding: const EdgeInsets.all(10),
+      decoration: ShapeDecoration(
+        color: isActive ? Colors.blue : Colors.transparent, 
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: isActive ? Colors.blue : const Color(0xFFC8C8CC), 
+          ),
+          borderRadius: BorderRadius.circular(15),
         ),
-        borderRadius: BorderRadius.circular(15),
       ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: isActive ? Colors.white : Colors.black,
+      child: Center( 
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.white : Colors.black,
+            fontSize: 14, 
+            fontFamily: 'Poppins', 
+            fontWeight: FontWeight.w500, 
+            height: 1.0,
+          ),
         ),
       ),
     );

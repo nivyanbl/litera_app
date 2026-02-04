@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_text_styles.dart';
 import '../../../data/models/product_model.dart';
 import '../../../routes/app_pages.dart';
 
@@ -16,7 +16,7 @@ class ProductCard extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(25),
         onTap: () {
           Get.toNamed(
             Routes.PRODUCT_DETAIL,
@@ -24,113 +24,123 @@ class ProductCard extends StatelessWidget {
           );
         },
         child: Container(
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.red),
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(width: 1, color: AppColors.grayLightActive),
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
+          padding: const EdgeInsets.all(12), 
+          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min, 
             children: [
-              Container(
-                height: 190,
-                width: double.infinity,
-                padding: const EdgeInsets.all(8),
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      height: double.infinity,
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0), 
+                child: SizedBox(
+                  height: 200, 
+                  width: double.infinity, 
+                  child: Stack(
+                    children: [
+                      // Gambar Utama
+                      Positioned.fill(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child:
-                              product.image != null && product.image!.isNotEmpty
+                          borderRadius: BorderRadius.circular(15),
+                          child: product.image != null && product.image!.isNotEmpty
                               ? Image.network(
                                   imageUrl,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.contain, 
                                   errorBuilder: (context, error, stackTrace) =>
                                       const Center(
-                                        child: Icon(
-                                          Icons.broken_image,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
+                                    child: Icon(Icons.broken_image, color: Colors.grey),
+                                  ),
                                 )
                               : const Center(
-                                  child: Icon(
-                                    Icons.book,
-                                    size: 40,
-                                    color: Colors.grey,
-                                  ),
+                                  child: Icon(Icons.book, size: 40, color: Colors.grey),
                                 ),
                         ),
                       ),
-                    ),
-                    const Positioned(
-                      top: 8,
-                      right: 28,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 14,
-                        child: Icon(
-                          Icons.favorite_border,
-                          size: 14,
-                          color: Colors.black,
+                      
+                      // Icon Love
+                      Positioned(
+                        top: 12,
+                        right: 12,
+                        child: Container(
+                          width: 25,
+                          height: 25,
+                          decoration: const ShapeDecoration(
+                            color: Colors.white,
+                            shape: CircleBorder(),
+                            shadows: [
+                              BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0,2))
+                            ]
+                          ),
+                          child: const Icon(
+                            Icons.favorite_border,
+                            size: 14,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 
+              const SizedBox(height: 16),
+
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 0,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Penulis
                     Text(
                       product.author,
-                      style: AppTextStyles.labelMedium.copyWith(
-                        color: AppColors.grayNormal,
+                      style: const TextStyle(
+                        color: AppColors.grayNormalHover,
+                        fontSize: 10,
+                        fontFamily: 'Poppins',
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     SizedBox(
-                      height: 30,
+                      height: 28,
                       child: Text(
                         product.title,
-                        maxLines: 2,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.labelMedium.copyWith(
-                          fontWeight: FontWeight.w500,
+                        style: const TextStyle(
                           color: Colors.black,
+                          fontSize: 10,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
                           height: 1.2,
                         ),
                       ),
                     ),
-
-                    const SizedBox(height: 4),
-
-                    // Harga
+                    const SizedBox(height: 16),
                     Text(
-                      "Rp ${product.price.toStringAsFixed(0)}",
-                      style: AppTextStyles.labelLarge.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
+  NumberFormat.currency(
+    locale: 'id_ID', 
+    symbol: 'Rp', 
+    decimalDigits: 0
+  ).format(product.price),
+  
+  style: const TextStyle(
+    color: Colors.black,
+    fontSize: 11,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w700,
+  ),
+),
                   ],
                 ),
               ),
+              const SizedBox(height: 8),
             ],
           ),
         ),
