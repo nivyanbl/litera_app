@@ -124,19 +124,19 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-  NumberFormat.currency(
-    locale: 'id_ID', 
-    symbol: 'Rp', 
-    decimalDigits: 0
-  ).format(product.price),
-  
-  style: const TextStyle(
-    color: Colors.black,
-    fontSize: 11,
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w700,
-  ),
-),
+                    NumberFormat.currency(
+                      locale: 'id_ID', 
+                      symbol: 'Rp', 
+                      decimalDigits: 0
+                    ).format(product.price),
+                    
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 11,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   ],
                 ),
               ),
