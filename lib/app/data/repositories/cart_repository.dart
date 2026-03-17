@@ -6,6 +6,7 @@ class CartRepository {
 
   CartRepository(this.cartProvider);
   Future<List<CartModel>> getCarts() async {
+    
     return await cartProvider.getCarts();
   }
 

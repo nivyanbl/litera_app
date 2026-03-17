@@ -33,7 +33,7 @@ class CartView extends GetView<CartController> {
     );
   }
 
-  //  AppBar 
+  //  AppBar
   AppBar _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
@@ -61,7 +61,7 @@ class CartView extends GetView<CartController> {
     );
   }
 
-  //  Cart List 
+  //  Cart List
   Widget _buildCartList() {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -71,7 +71,7 @@ class CartView extends GetView<CartController> {
     );
   }
 
-  //  Cart Item 
+  //  Cart Item
   Widget _buildCartItem(int index) {
     final item = controller.cartList[index];
 
@@ -170,7 +170,7 @@ class CartView extends GetView<CartController> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
-            item.product?.categoryId?.toString() ?? '-',
+            item.product?.category?.name ?? 'Tanpa Kategori',
             style: TextStyle(
               fontSize: 11,
               color: Colors.grey.shade600,
@@ -183,9 +183,7 @@ class CartView extends GetView<CartController> {
         // Judul
         Text(
           item.product?.title ?? 'Tanpa Judul',
-          style: AppTextStyles.titleSmall.copyWith(
-            color: Colors.black,
-          ),
+          style: AppTextStyles.titleSmall.copyWith(color: Colors.black),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),

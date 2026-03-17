@@ -1,6 +1,9 @@
+import 'package:litera/app/data/models/category_model.dart';
+
 class ProductModel {
   final int id;
   final int categoryId;
+  final CategoryModel? category;
   final String title;
   final String slug;
   final double price;
@@ -16,6 +19,7 @@ class ProductModel {
   ProductModel({
     required this.id,
     required this.categoryId,
+    this.category,
     required this.title,
     required this.slug,
     required this.price,
@@ -33,6 +37,9 @@ class ProductModel {
     return ProductModel(
       id: json['id'] ?? 0,
       categoryId: json['category_id'] ?? 0,
+      category: json['category'] != null 
+          ? CategoryModel.fromJson(json['category']) 
+          : null,
       title: json['title'] ?? '',
       slug: json['slug'] ?? '',
       price: json['price'] is num
