@@ -21,8 +21,11 @@ void main() async {
       title: "litera",
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.lightTheme.copyWith(
+        appBarTheme: AppTheme.lightTheme.appBarTheme.copyWith(
+          surfaceTintColor: Colors.transparent,
+        ),
+      ),
     ),
   );
 }

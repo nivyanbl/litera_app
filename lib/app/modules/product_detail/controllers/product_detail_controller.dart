@@ -2,9 +2,13 @@ import 'package:get/get.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../../data/models/product_model.dart';
+import '../../../data/repositories/cart_repository.dart';
 import '../../../routes/app_pages.dart';
 
 class ProductDetailController extends GetxController {
+  final CartRepository cartRepository;
+  ProductDetailController(this.cartRepository);
+
   final isExpanded = false.obs;
 
   late final ProductModel product;
@@ -41,10 +45,27 @@ class ProductDetailController extends GetxController {
 
   Future<void> handleAddToCart() async {
     if (!await _ensureLoggedIn()) return;
+
+    try {
+      await cartRepository.addToCart(product.id);
+      Get.snackbar(
+        'Berhasil',
+        'Produk ditambahkan ke keranjang',
+        snackPosition: SnackPosition.TOP,
+      );
+      await Get.toNamed(Routes.CART);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal menambahkan ke keranjang: $e',
+        snackPosition: SnackPosition.TOP,
+      );
+    }
   }
 
   Future<void> handleCartIcon() async {
     if (!await _ensureLoggedIn()) return;
+    await Get.toNamed(Routes.CART);
   }
 
   Future<void> handleLoveTap() async {

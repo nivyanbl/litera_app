@@ -4,8 +4,7 @@ import '../providers/cart_provider.dart';
 class CartRepository {
   final CartProvider cartProvider;
 
-  CartRepository({required this.cartProvider});
-
+  CartRepository(this.cartProvider);
   Future<List<CartModel>> getCarts() async {
     return await cartProvider.getCarts();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../routes/app_pages.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../controllers/home_controller.dart';
 
@@ -37,7 +38,13 @@ class HomeHeader extends GetView<HomeController> {
             ),
           ),
           const SizedBox(width: 10),
-          const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+          GestureDetector(
+            onTap: () => Get.toNamed(Routes.CART),
+            child: const Icon(
+              Icons.shopping_cart_outlined,
+              color: Colors.black,
+            ),
+          ),
           const SizedBox(width: 10),
           const Icon(Icons.favorite_outline, color: Colors.black87),
         ],

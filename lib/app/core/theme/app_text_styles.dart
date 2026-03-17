@@ -39,17 +39,17 @@ class AppTextStyles {
   static const titleLarge = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const titleMedium = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 16,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
   static const titleSmall = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 14,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
   );
 
   // Body

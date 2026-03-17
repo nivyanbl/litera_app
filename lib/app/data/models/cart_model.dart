@@ -1,18 +1,20 @@
 import 'product_model.dart';
 
 class CartModel {
-  final int id;
+  final int? id;
   final int userId;
   final int productId;
-  final int quantity; 
-  final ProductModel? product; 
+  final int quantity;
+  final ProductModel? product;
+  bool isSelected;
 
   CartModel({
-    required this.id,
+    this.id,
     required this.userId,
     required this.productId,
-    this.quantity = 1, 
+    this.quantity = 1,
     this.product,
+    this.isSelected = false,
   });
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
@@ -21,8 +23,8 @@ class CartModel {
       userId: json['user_id'] ?? 0,
       productId: json['product_id'],
       quantity: json['quantity'] ?? 1,
-      product: json['product'] != null 
-          ? ProductModel.fromJson(json['product']) 
+      product: json['product'] != null
+          ? ProductModel.fromJson(json['product'])
           : null,
     );
   }
