@@ -33,17 +33,18 @@ class HomeController extends GetxController {
   }
 
   // Fungsi Ambil Data Produk
-  Future<void> fetchProducts({String? query}) async {
+  Future<void> fetchProducts({String? query, int? categoryId}) async {
     try {
       isLoading(true);
-      final products = await repository.getProducts(search: query);
+
+      final products = await repository.getProducts(
+        search: query,
+        categoryId: categoryId, 
+      );
+
       productList.assignAll(products);
     } catch (e) {
-      Get.snackbar(
-        "Error",
-        "Gagal memuat data: ${e.toString()}",
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.snackbar("Error", "Gagal memuat data: ${e.toString()}");
     } finally {
       isLoading(false);
     }
