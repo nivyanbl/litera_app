@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
+import 'package:litera/app/core/widgets/custom_app_bar.dart';
 import 'package:litera/app/core/widgets/custom_button.dart';
 import 'package:litera/app/modules/cart/controllers/cart_controller.dart';
 import 'package:litera/app/routes/app_pages.dart';
@@ -19,8 +20,7 @@ class CartView extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F2F2),
-      appBar: _buildAppBar(),
+      appBar: const CustomAppBar(title: 'Keranjang', showRightIcon: true),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -33,38 +33,10 @@ class CartView extends GetView<CartController> {
     );
   }
 
-  //  AppBar
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0.5,
-      shadowColor: Colors.black12,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () => Get.back(),
-      ),
-      title: const Text(
-        'Keranjang',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.favorite_border, color: Colors.black),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
   //  Cart List
   Widget _buildCartList() {
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       itemCount: controller.cartList.length,
       separatorBuilder: (_, __) => const SizedBox(height: 10),
       itemBuilder: (_, index) => _buildCartItem(index),
@@ -76,16 +48,16 @@ class CartView extends GetView<CartController> {
     final item = controller.cartList[index];
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.grayLightActive),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Checkbox
-          _buildCheckbox(index),
+          SizedBox(height: 100, child: Center(child: _buildCheckbox(index))),
           const SizedBox(width: 10),
 
           // Cover buku
@@ -139,8 +111,8 @@ class CartView extends GetView<CartController> {
           ? Image.network(
               imageUrl,
               width: 76,
-              height: 106,
-              fit: BoxFit.cover,
+              height: 100,
+              fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => _coverPlaceholder(),
             )
           : _coverPlaceholder(),
@@ -151,8 +123,12 @@ class CartView extends GetView<CartController> {
     return Container(
       width: 76,
       height: 106,
-      color: Colors.grey.shade200,
-      child: Icon(Icons.book_outlined, size: 28, color: Colors.grey.shade400),
+      color: AppColors.grayLight,
+      child: const Icon(
+        Icons.image_not_supported,
+        size: 28,
+        color: AppColors.grayNormal,
+      ),
     );
   }
 
@@ -172,9 +148,9 @@ class CartView extends GetView<CartController> {
           child: Text(
             item.product?.category?.name ?? 'Tanpa Kategori',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 10,
               color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -183,11 +159,11 @@ class CartView extends GetView<CartController> {
         // Judul
         Text(
           item.product?.title ?? 'Tanpa Judul',
-          style: AppTextStyles.titleSmall.copyWith(color: Colors.black),
-          maxLines: 2,
+          style: AppTextStyles.labelMedium.copyWith(color: AppColors.grayDark, fontWeight: FontWeight.w500),
+          maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 12),
 
         // Harga
         Text(
@@ -198,19 +174,19 @@ class CartView extends GetView<CartController> {
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
 
         // Tombol hapus
         Align(
-          alignment: Alignment.bottomRight,
+          alignment: Alignment.topRight,
           child: GestureDetector(
             onTap: () => controller.removeItem(item.id!),
             child: Container(
-              width: 70,
-              height: 34,
+              width: 60,
+              height: 32,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(17),
-                border: Border.all(color: Colors.grey, width: 0.8),
+                border: Border.all(color: Colors.black, width: 0.8),
               ),
               child: Center(
                 child: Icon(
@@ -363,7 +339,7 @@ class CartView extends GetView<CartController> {
                     ),
                     onPressed: controller.selectedCount > 0
                         ? () {
-                            /* TODO: checkout */
+                            Get.toNamed(Routes.CHECKOUT);
                           }
                         : null,
                     child: Text(
