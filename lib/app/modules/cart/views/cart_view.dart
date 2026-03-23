@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
+import 'package:litera/app/core/widgets/custom_app_bar.dart';
 import 'package:litera/app/core/widgets/custom_button.dart';
 import 'package:litera/app/modules/cart/controllers/cart_controller.dart';
 import 'package:litera/app/routes/app_pages.dart';
@@ -20,7 +21,7 @@ class CartView extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
-      appBar: _buildAppBar(),
+      appBar: const CustomAppBar(title: 'Keranjang', showRightIcon: true),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -30,34 +31,6 @@ class CartView extends GetView<CartController> {
             : _buildCartList();
       }),
       bottomNavigationBar: _buildBottomBar(),
-    );
-  }
-
-  //  AppBar
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0.5,
-      shadowColor: Colors.black12,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () => Get.back(),
-      ),
-      title: const Text(
-        'Keranjang',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.favorite_border, color: Colors.black),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 
@@ -140,7 +113,7 @@ class CartView extends GetView<CartController> {
               imageUrl,
               width: 76,
               height: 106,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               errorBuilder: (_, __, ___) => _coverPlaceholder(),
             )
           : _coverPlaceholder(),
@@ -179,6 +152,17 @@ class CartView extends GetView<CartController> {
           ),
         ),
         const SizedBox(height: 6),
+
+        // Judul
+        Text(
+          item.product?.author.isNotEmpty == true
+              ? item.product!.author
+              : 'Penulis tidak diketahui',
+          style: AppTextStyles.bodySmall.copyWith(color: AppColors.grayNormal),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        const SizedBox(height: 4),
 
         // Judul
         Text(
@@ -363,7 +347,7 @@ class CartView extends GetView<CartController> {
                     ),
                     onPressed: controller.selectedCount > 0
                         ? () {
-                            /* TODO: checkout */
+                            Get.toNamed(Routes.CHECKOUT);
                           }
                         : null,
                     child: Text(
