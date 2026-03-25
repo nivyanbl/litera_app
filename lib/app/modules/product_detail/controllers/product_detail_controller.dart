@@ -41,6 +41,13 @@ class ProductDetailController extends GetxController {
 
   Future<void> handleBuyNow() async {
     if (!await _ensureLoggedIn()) return;
+    await Get.toNamed(
+      Routes.CHECKOUT,
+      arguments: {
+        'source': 'direct',
+        'product': product,
+      },
+    );
   }
 
   Future<void> handleAddToCart() async {

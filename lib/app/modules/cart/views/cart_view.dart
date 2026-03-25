@@ -339,7 +339,10 @@ class CartView extends GetView<CartController> {
                     ),
                     onPressed: controller.selectedCount > 0
                         ? () {
-                            Get.toNamed(Routes.CHECKOUT);
+                            Get.toNamed(
+                              Routes.CHECKOUT,
+                              arguments: {'source': 'cart'},
+                            );
                           }
                         : null,
                     child: Text(
