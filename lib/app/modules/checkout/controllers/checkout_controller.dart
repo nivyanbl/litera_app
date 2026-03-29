@@ -3,6 +3,7 @@ import 'package:litera/app/data/models/cart_model.dart';
 import 'package:litera/app/data/models/product_model.dart';
 import 'package:litera/app/data/repositories/checkout_repository.dart';
 import 'package:litera/app/modules/cart/controllers/cart_controller.dart';
+import 'package:litera/app/routes/app_pages.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CheckoutController extends GetxController {
@@ -103,14 +104,15 @@ class CheckoutController extends GetxController {
           await launchUrl(
             url,
             mode: LaunchMode.externalApplication,
-          );
-
-          await cartC.fetchCarts();
-
-          Get.snackbar('Sukses', result.message);
+            );
         } catch (e) {
           Get.snackbar('Error', 'Tidak dapat membuka link pembayaran');
         }
+
+        await cartC.fetchCarts();
+
+        Get.snackbar('Sukses', result.message);
+        Get.offAllNamed(Routes.ORDER_HISTORY);
       } else {
         Get.snackbar('Error', 'URL pembayaran kosong');
       }
