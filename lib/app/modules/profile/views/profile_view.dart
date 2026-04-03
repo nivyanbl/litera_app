@@ -105,7 +105,7 @@ class ProfileView extends GetView<ProfileController> {
                     icon: Icons.logout_outlined,
                     title: 'Keluar',
                     onTap: () {
-                      // Handle logout
+                      _showLogoutDialog();
                     },
                     isLogout: true,
                   ),
@@ -171,6 +171,28 @@ class ProfileView extends GetView<ProfileController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showLogoutDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Konfirmasi Keluar'),
+        content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
+        actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              controller.logout();
+            },
+            child: Text(
+              'Keluar',
+              style: TextStyle(color: AppColors.errorNormal),
+            ),
+          ),
+        ],
       ),
     );
   }

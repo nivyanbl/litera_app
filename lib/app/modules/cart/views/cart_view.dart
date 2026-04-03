@@ -48,6 +48,7 @@ class CartView extends GetView<CartController> {
     final item = controller.cartList[index];
 
     return Container(
+      height: 116,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -154,27 +155,30 @@ class CartView extends GetView<CartController> {
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 4),
 
         // Judul
         Text(
           item.product?.title ?? 'Tanpa Judul',
-          style: AppTextStyles.labelMedium.copyWith(color: AppColors.grayDark, fontWeight: FontWeight.w500),
-          maxLines: 3,
+          style: AppTextStyles.labelMedium.copyWith(
+            color: AppColors.grayDark,
+            fontWeight: FontWeight.w500,
+          ),
+          maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 6),
 
         // Harga
         Text(
           _fmt.format(item.product?.price ?? 0),
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
 
         // Tombol hapus
         Align(
@@ -183,7 +187,7 @@ class CartView extends GetView<CartController> {
             onTap: () => controller.removeItem(item.id!),
             child: Container(
               width: 60,
-              height: 32,
+              height: 28,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(17),
                 border: Border.all(color: Colors.black, width: 0.8),
@@ -191,7 +195,7 @@ class CartView extends GetView<CartController> {
               child: Center(
                 child: Icon(
                   Icons.delete_outline_rounded,
-                  size: 18,
+                  size: 16,
                   color: Colors.black,
                 ),
               ),

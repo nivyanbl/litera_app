@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:litera/app/data/repositories/product_repository.dart';
+import 'package:litera/app/core/services/download_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/secure_storage.dart';
-import '../../../core/storage/download_storage.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/repositories/cart_repository.dart';
 import '../../../data/repositories/book_access_repository.dart';
@@ -13,6 +13,7 @@ class ProductDetailController extends GetxController {
   final BookAccessRepository bookAccessRepository;
 
   final ProductRepository productRepository = Get.find<ProductRepository>();
+  final downloadService = DownloadService.to;
 
   ProductDetailController(this.cartRepository, this.bookAccessRepository);
 
@@ -20,12 +21,16 @@ class ProductDetailController extends GetxController {
 
   var isOwned = false.obs;
   var isLoadingOwnership = true.obs;
-  var isDownloaded = false.obs;
   var isDownloading = false.obs;
 
   late final ProductModel product;
   late final String imageUrl;
   late final String descriptionText;
+
+  // Reactive getter untuk isDownloaded dari DownloadService
+  Rx<bool> get isDownloaded =>
+      Rx<bool>(downloadService.isDownloaded(product.id.toString()))
+        ..listen((_) => update(['download_status']));
 
   @override
   void onInit() {
@@ -72,7 +77,9 @@ class ProductDetailController extends GetxController {
   }
 
   void _checkDownloadStatus() {
-    isDownloaded.value = DownloadStorage.isBookDownloaded(product.id);
+    // Status akan diambil dari DownloadService secara otomatis
+    // via getter yang reactive
+    update(['download_status']);
   }
 
   void toggleExpanded() => isExpanded.value = !isExpanded.value;
@@ -131,8 +138,9 @@ class ProductDetailController extends GetxController {
       );
 
       if (success) {
-        await DownloadStorage.markAsDownloaded(product.id);
-        isDownloaded.value = true;
+        // Gunakan DownloadService untuk sinkronisasi global
+        await downloadService.markAsDownloaded(product.id.toString());
+        update(['download_status']);
         Get.snackbar(
           'Berhasil',
           'E-book berhasil diunduh',
@@ -158,8 +166,9 @@ class ProductDetailController extends GetxController {
 
   Future<void> handleDeleteDownload() async {
     try {
-      await DownloadStorage.removeDownload(product.id);
-      isDownloaded.value = false;
+      // Gunakan DownloadService untuk sinkronisasi global
+      await downloadService.removeDownload(product.id.toString());
+      update(['download_status']);
       Get.snackbar(
         'Berhasil',
         'Unduhan berhasil dihapus',
