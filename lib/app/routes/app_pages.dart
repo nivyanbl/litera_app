@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../modules/book_access/views/book_access_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
 import '../modules/checkout/bindings/checkout_binding.dart';
@@ -14,6 +15,7 @@ import '../modules/product_detail/bindings/product_detail_binding.dart';
 import '../modules/product_detail/views/product_detail_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/book_access/bindings/book_access_binding.dart';
 
 part 'app_routes.dart';
 
@@ -58,5 +60,12 @@ class AppPages {
       page: () => const OrderHistoryView(),
       binding: OrderHistoryBinding(),
     ),
+    GetPage(
+      name: _Paths.BOOK_ACCESS,
+      page: () => const BookAccessView(),
+      binding: BookAccessBinding(),
+    ),
   ];
 }
+
+

@@ -30,4 +30,14 @@ class ProductProvider {
     
     return ProductModel.fromJson(response.data['data']);
   }
+
+  // Cek kepemilikan produk
+  Future<bool> checkOwnership(int productId) async {
+    try {
+      final response = await apiClient.get('/products/$productId/ownership');
+      return response.data['is_owned'] ?? false; 
+    } catch (e) {
+      return false;
+    }
+}
 }
