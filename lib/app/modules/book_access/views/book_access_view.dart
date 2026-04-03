@@ -12,20 +12,26 @@ class BookAccessView extends GetView<BookAccessController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(controller.title, style: AppTextStyles.bodyLarge), 
+        title: Text(controller.title, style: AppTextStyles.bodyLarge),
         actions: [
-          Obx(() => IconButton(
-            icon: controller.isDownloading.value 
-                ? const SizedBox(
-                    width: 20, height: 20, 
-                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
-                  )
-                : const Icon(Icons.download),
-            onPressed: controller.isDownloading.value 
-                ? null 
-                : () => controller.downloadToDevice(),
-            tooltip: 'Simpan PDF ke Perangkat',
-          )),
+          Obx(
+            () => IconButton(
+              icon: controller.isDownloading.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Icon(Icons.download),
+              onPressed: controller.isDownloading.value
+                  ? null
+                  : () => controller.downloadToDevice(),
+              tooltip: 'Simpan PDF ke Perangkat',
+            ),
+          ),
         ],
       ),
       body: Obx(() {
@@ -50,7 +56,7 @@ class BookAccessView extends GetView<BookAccessController> {
           return PDFView(
             filePath: controller.pdfFile.value!.path,
             enableSwipe: true,
-            swipeHorizontal: false, 
+            swipeHorizontal: false,
             autoSpacing: false,
             pageFling: false,
             onError: (error) {

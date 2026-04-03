@@ -8,9 +8,15 @@ class BookAccessBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<ApiClient>(() => ApiClient());
-    
-    Get.lazyPut<BookAccessProvider>(() => BookAccessProvider(Get.find<ApiClient>()));
-    Get.lazyPut<BookAccessRepository>(() => BookAccessRepository(Get.find<BookAccessProvider>()));
-    Get.lazyPut<BookAccessController>(() => BookAccessController(Get.find<BookAccessRepository>()));
+
+    Get.lazyPut<BookAccessProvider>(
+      () => BookAccessProvider(Get.find<ApiClient>()),
+    );
+    Get.lazyPut<BookAccessRepository>(
+      () => BookAccessRepository(Get.find<BookAccessProvider>()),
+    );
+    Get.lazyPut<BookAccessController>(
+      () => BookAccessController(Get.find<BookAccessRepository>()),
+    );
   }
 }

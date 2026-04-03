@@ -11,6 +11,7 @@ abstract class Routes {
   static const CHECKOUT = _Paths.CHECKOUT;
   static const ORDER_HISTORY = _Paths.ORDER_HISTORY;
   static const BOOK_ACCESS = _Paths.BOOK_ACCESS;
+  static const PROFILE = _Paths.PROFILE;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const CHECKOUT = '/checkout';
   static const ORDER_HISTORY = '/order-history';
   static const BOOK_ACCESS = '/book-access';
+  static const PROFILE = '/profile';
 }

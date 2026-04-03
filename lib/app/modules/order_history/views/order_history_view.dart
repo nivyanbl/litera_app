@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
 import 'package:litera/app/core/widgets/custom_app_bar.dart';
+import 'package:litera/app/core/widgets/custom_bottom_navbar.dart';
 import 'package:litera/app/data/models/order_model.dart';
 import 'package:litera/app/modules/order_history/controllers/order_history_controller.dart';
 import 'package:litera/app/modules/order_history/widgets/download_order_card.dart';
@@ -68,6 +69,16 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
             ],
           );
         }),
+        bottomNavigationBar: CustomBottomNavbar(
+          currentIndex: 1,
+          onTap: (index) {
+            if (index == 0) {
+              Get.offNamed('/home');
+            } else if (index == 2) {
+              Get.offNamed('/profile');
+            }
+          },
+        ),
       ),
     );
   }
