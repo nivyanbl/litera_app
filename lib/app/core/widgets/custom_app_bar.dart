@@ -4,16 +4,22 @@ import 'package:litera/app/core/theme/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final bool showLeftIcon;
   final bool showRightIcon;
+  final IconData leftIcon;
   final IconData rightIcon;
+  final VoidCallback? onLeftIconPressed;
   final VoidCallback? onRightIconPressed;
   final VoidCallback? onBackPressed;
 
   const CustomAppBar({
     super.key,
     required this.title,
+    this.showLeftIcon = true,
     this.showRightIcon = true,
+    this.leftIcon = Icons.arrow_back,
     this.rightIcon = Icons.favorite_border,
+    this.onLeftIconPressed,
     this.onRightIconPressed,
     this.onBackPressed,
   });
@@ -28,10 +34,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: Colors.transparent,
       elevation: 1,
       shadowColor: Colors.black26,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: onBackPressed ?? Get.back,
-      ),
+      leading: showLeftIcon
+          ? IconButton(
+              icon: Icon(leftIcon, color: Colors.black),
+              onPressed: onLeftIconPressed ?? onBackPressed ?? Get.back,
+            )
+          : null,
       title: Text(
         title,
         style: const TextStyle(

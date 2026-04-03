@@ -6,10 +6,10 @@ class CustomBottomNavbar extends StatefulWidget {
   final Function(int) onTap;
 
   const CustomBottomNavbar({
-    Key? key,
+    super.key,
     this.currentIndex = 0,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomBottomNavbar> createState() => _CustomBottomNavbarState();
@@ -26,44 +26,49 @@ class _CustomBottomNavbarState extends State<CustomBottomNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      currentIndex: _selectedIndex,
-      onTap: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-        widget.onTap(index);
-      },
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.white,
-      selectedItemColor: AppColors.primaryNormal,
-      unselectedItemColor: AppColors.grayNormal,
-      selectedLabelStyle: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
       ),
-      unselectedLabelStyle: const TextStyle(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
+      child: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          widget.onTap(index);
+        },
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        selectedItemColor: AppColors.primaryNormal,
+        unselectedItemColor: Colors.black,
+        selectedLabelStyle: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        unselectedLabelStyle: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+        elevation: 8,
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.menu_book),
+            activeIcon: const Icon(Icons.menu_book),
+            label: 'Buku Saya',
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person_outline_rounded),
+            activeIcon: const Icon(Icons.person_outline_rounded),
+            label: 'Akun',
+          ),
+        ],
       ),
-      elevation: 8,
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.home_outlined),
-          activeIcon: const Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.history_outlined),
-          activeIcon: const Icon(Icons.history),
-          label: 'Buku Saya',
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.person_outlined),
-          activeIcon: const Icon(Icons.person),
-          label: 'Akun',
-        ),
-      ],
     );
   }
 }

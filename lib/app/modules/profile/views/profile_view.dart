@@ -148,7 +148,9 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               Icon(
                 icon,
-                color: isLogout ? AppColors.errorNormal : AppColors.primaryNormal,
+                color: isLogout
+                    ? AppColors.errorNormal
+                    : AppColors.primaryNormal,
                 size: 24,
               ),
               const SizedBox(width: 16),

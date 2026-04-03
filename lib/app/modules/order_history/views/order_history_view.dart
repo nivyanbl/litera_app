@@ -20,6 +20,7 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
       child: Scaffold(
         appBar: CustomAppBar(
           title: 'Buku Saya',
+          showLeftIcon: false,
           rightIcon: Icons.search,
           onRightIconPressed: () {},
         ),

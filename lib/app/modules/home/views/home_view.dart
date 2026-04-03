@@ -30,7 +30,7 @@ class HomeView extends GetView<HomeController> {
                 const BannerCarousel(),
                 const SizedBox(height: 24),
                 // KATEGORI
-               CategorySection(),
+                CategorySection(),
                 const SizedBox(height: 24),
                 //  LIST PRODUK (GRID)
                 Padding(
