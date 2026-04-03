@@ -61,7 +61,7 @@ class AppTextStyles {
   static const bodyMedium = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
   );
   static const bodySmall = TextStyle(
     fontFamily: 'Poppins',
@@ -73,7 +73,7 @@ class AppTextStyles {
   static const labelLarge = TextStyle(
     fontFamily: 'Poppins',
     fontSize: 13,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
   );
   static const labelMedium = TextStyle(
     fontFamily: 'Poppins',

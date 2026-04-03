@@ -16,4 +16,8 @@ class ProductRepository {
     return await productProvider.getProductDetail(idOrSlug);
   }
 
+  Future<bool> checkOwnership(int productId) async {
+    return await productProvider.checkOwnership(productId);
+  }
+
 }

@@ -135,4 +135,24 @@ class ApiClient {
       throw Exception('Terjadi kesalahan: $e');
     }
   }
+
+  Future<Response> download(
+    String path,
+    String savePath, {
+    void Function(int, int)? onReceiveProgress,
+  }) async {
+    try {
+      return await dio.download(
+        path,
+        savePath,
+        onReceiveProgress: onReceiveProgress,
+      );
+    } on DioException catch (e) {
+      throw Exception(e.error ?? 'Terjadi kesalahan saat mengunduh file');
+    } catch (e) {
+      throw Exception('Terjadi kesalahan: $e');
+    }
+  }
+
 }
+

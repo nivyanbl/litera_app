@@ -1,19 +1,36 @@
 import 'package:get/get.dart';
+import 'package:litera/app/data/repositories/product_repository.dart';
+import 'package:litera/app/core/services/download_service.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/storage/secure_storage.dart';
 import '../../../data/models/product_model.dart';
 import '../../../data/repositories/cart_repository.dart';
+import '../../../data/repositories/book_access_repository.dart';
 import '../../../routes/app_pages.dart';
 
 class ProductDetailController extends GetxController {
   final CartRepository cartRepository;
-  ProductDetailController(this.cartRepository);
+  final BookAccessRepository bookAccessRepository;
+
+  final ProductRepository productRepository = Get.find<ProductRepository>();
+  final downloadService = DownloadService.to;
+
+  ProductDetailController(this.cartRepository, this.bookAccessRepository);
 
   final isExpanded = false.obs;
+
+  var isOwned = false.obs;
+  var isLoadingOwnership = true.obs;
+  var isDownloading = false.obs;
 
   late final ProductModel product;
   late final String imageUrl;
   late final String descriptionText;
+
+  // Reactive getter untuk isDownloaded dari DownloadService
+  Rx<bool> get isDownloaded =>
+      Rx<bool>(downloadService.isDownloaded(product.id.toString()))
+        ..listen((_) => update(['download_status']));
 
   @override
   void onInit() {
@@ -35,12 +52,51 @@ class ProductDetailController extends GetxController {
     descriptionText = (description != null && description.isNotEmpty)
         ? description
         : "Deskripsi belum tersedia.";
+    _checkOwnershipStatus();
+  }
+
+  Future<void> _checkOwnershipStatus() async {
+    final token = await SecureStorage.getToken();
+
+    if (token == null || token.isEmpty) {
+      isOwned.value = false;
+      isLoadingOwnership.value = false;
+      return;
+    }
+
+    try {
+      isOwned.value = await productRepository.checkOwnership(product.id);
+      if (isOwned.value) {
+        _checkDownloadStatus();
+      }
+    } catch (e) {
+      print("Gagal mengecek kepemilikan: $e");
+    } finally {
+      isLoadingOwnership.value = false;
+    }
+  }
+
+  void _checkDownloadStatus() {
+    // Status akan diambil dari DownloadService secara otomatis
+    // via getter yang reactive
+    update(['download_status']);
   }
 
   void toggleExpanded() => isExpanded.value = !isExpanded.value;
 
+  void goToReadBook() {
+    Get.toNamed(
+      Routes.BOOK_ACCESS,
+      arguments: {'product_id': product.id, 'title': product.title},
+    );
+  }
+
   Future<void> handleBuyNow() async {
     if (!await _ensureLoggedIn()) return;
+    await Get.toNamed(
+      Routes.CHECKOUT,
+      arguments: {'source': 'direct', 'product': product},
+    );
   }
 
   Future<void> handleAddToCart() async {
@@ -70,6 +126,61 @@ class ProductDetailController extends GetxController {
 
   Future<void> handleLoveTap() async {
     if (!await _ensureLoggedIn()) return;
+  }
+
+  Future<void> handleDownloadEbook() async {
+    isDownloading.value = true;
+    try {
+      final safeFileName = '${product.title.replaceAll(' ', '_')}.pdf';
+      bool success = await bookAccessRepository.downloadPdfToDevice(
+        product.id,
+        safeFileName,
+      );
+
+      if (success) {
+        // Gunakan DownloadService untuk sinkronisasi global
+        await downloadService.markAsDownloaded(product.id.toString());
+        update(['download_status']);
+        Get.snackbar(
+          'Berhasil',
+          'E-book berhasil diunduh',
+          snackPosition: SnackPosition.TOP,
+        );
+      } else {
+        Get.snackbar(
+          'Gagal',
+          'Gagal mengunduh e-book',
+          snackPosition: SnackPosition.TOP,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Terjadi kesalahan saat mengunduh: $e',
+        snackPosition: SnackPosition.TOP,
+      );
+    } finally {
+      isDownloading.value = false;
+    }
+  }
+
+  Future<void> handleDeleteDownload() async {
+    try {
+      // Gunakan DownloadService untuk sinkronisasi global
+      await downloadService.removeDownload(product.id.toString());
+      update(['download_status']);
+      Get.snackbar(
+        'Berhasil',
+        'Unduhan berhasil dihapus',
+        snackPosition: SnackPosition.TOP,
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Terjadi kesalahan saat menghapus: $e',
+        snackPosition: SnackPosition.TOP,
+      );
+    }
   }
 
   Future<bool> _ensureLoggedIn() async {

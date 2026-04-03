@@ -6,8 +6,8 @@ class CheckoutRepository {
 
   CheckoutRepository(this.provider);
 
-  Future<CheckoutModel> postCheckout() async {
-    final response = await provider.postCheckout();
+  Future<CheckoutModel> postCheckout({Map<String, dynamic>? data}) async {
+    final response = await provider.postCheckout(data: data);
     return CheckoutModel.fromJson(response);
   }
 }

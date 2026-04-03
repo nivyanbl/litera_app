@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/widgets/custom_bottom_navbar.dart';
 import '../widgets/home_header.dart';
 import '../widgets/banner_carousel.dart';
 import '../widgets/category_section.dart';
@@ -29,7 +30,7 @@ class HomeView extends GetView<HomeController> {
                 const BannerCarousel(),
                 const SizedBox(height: 24),
                 // KATEGORI
-               CategorySection(),
+                CategorySection(),
                 const SizedBox(height: 24),
                 //  LIST PRODUK (GRID)
                 Padding(
@@ -112,6 +113,16 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavbar(
+        currentIndex: 0,
+        onTap: (index) {
+          if (index == 1) {
+            Get.offNamed('/order-history');
+          } else if (index == 2) {
+            Get.offNamed('/profile');
+          }
+        },
       ),
     );
   }
