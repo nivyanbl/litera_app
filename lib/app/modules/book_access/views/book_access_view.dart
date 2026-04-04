@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
+import 'package:litera/app/core/widgets/shimmer_loading.dart';
 import 'package:litera/app/modules/book_access/controllers/book_access_controller.dart';
-import 'package:litera/app/core/theme/app_colors.dart';
 
 class BookAccessView extends GetView<BookAccessController> {
   const BookAccessView({super.key});
@@ -36,16 +36,7 @@ class BookAccessView extends GetView<BookAccessController> {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Menyiapkan buku untuk dibaca...'),
-              ],
-            ),
-          );
+          return const ShimmerProductDetail();
         }
 
         if (controller.errorMessage.isNotEmpty) {

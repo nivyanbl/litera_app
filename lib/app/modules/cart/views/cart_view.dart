@@ -5,6 +5,7 @@ import 'package:litera/app/core/theme/app_colors.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
 import 'package:litera/app/core/widgets/custom_app_bar.dart';
 import 'package:litera/app/core/widgets/custom_button.dart';
+import 'package:litera/app/core/widgets/shimmer_loading.dart';
 import 'package:litera/app/modules/cart/controllers/cart_controller.dart';
 import 'package:litera/app/routes/app_pages.dart';
 
@@ -23,7 +24,7 @@ class CartView extends GetView<CartController> {
       appBar: const CustomAppBar(title: 'Keranjang', showRightIcon: true),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return ShimmerBookList(itemCount: 5, direction: Axis.vertical);
         }
         return controller.cartList.isEmpty
             ? _buildEmptyState()
