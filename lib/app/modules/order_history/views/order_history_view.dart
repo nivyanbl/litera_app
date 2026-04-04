@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
+import 'package:litera/app/core/widgets/shimmer_loading.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
 import 'package:litera/app/core/widgets/custom_app_bar.dart';
 import 'package:litera/app/core/widgets/custom_bottom_navbar.dart';
@@ -26,7 +27,7 @@ class OrderHistoryView extends GetView<OrderHistoryController> {
         ),
         body: Obx(() {
           if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            return ShimmerBookList(itemCount: 5, direction: Axis.vertical);
           }
 
           return Column(

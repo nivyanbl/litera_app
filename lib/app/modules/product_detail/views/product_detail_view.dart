@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
 import 'package:litera/app/core/theme/app_text_styles.dart';
 import 'package:litera/app/core/widgets/app_icon.dart';
+import 'package:litera/app/core/widgets/shimmer_loading.dart';
 import 'package:litera/app/modules/product_detail/widgets/product_detail_widget.dart';
 import '../controllers/product_detail_controller.dart';
 
@@ -53,7 +54,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 return Container(
                   padding: const EdgeInsets.all(16),
                   color: Colors.white,
-                  child: const Center(child: CircularProgressIndicator()),
+                  child:  SkeletonCheckoutItem(),
                 );
               }
 
@@ -84,9 +85,11 @@ class ProductDetailView extends GetView<ProductDetailController> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              child:  Text(
+                              child: Text(
                                 'Baca Sekarang',
-                                style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -109,7 +112,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                             child: const Icon(
                               Icons.delete_rounded,
                               color: Colors.white,
-                              size: 30
+                              size: 30,
                             ),
                           ),
                         ),

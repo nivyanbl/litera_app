@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:litera/app/core/widgets/shimmer_loading.dart';
 import '../controllers/home_controller.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/widgets/custom_bottom_navbar.dart';
@@ -37,12 +38,7 @@ class HomeView extends GetView<HomeController> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Obx(() {
                     if (controller.isLoading.value) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
+                      return const ShimmerGridBooks(itemCount: 4, crossAxisCount: 2);
                     }
 
                     // Cek Data
