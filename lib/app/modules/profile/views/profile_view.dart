@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/custom_bottom_navbar.dart';
@@ -11,110 +12,187 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text(controller.title, style: AppTextStyles.bodyLarge),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'Akun',
+          style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Profile Header
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-              decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16),
+      body: Obx(
+        () => controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+
+                    // ── Profile Card ──────────────────────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            // Avatar
+                            GestureDetector(
+                              onTap: () => controller.pickImage(),
+                              child: CircleAvatar(
+                                radius: 36,
+                                backgroundColor: AppColors.primaryNormal,
+                                backgroundImage:
+                                    controller
+                                        .selectedImagePath
+                                        .value
+                                        .isNotEmpty
+                                    ? FileImage(
+                                        File(
+                                          controller.selectedImagePath.value,
+                                        ),
+                                      )
+                                    : null,
+                                child:
+                                    controller.selectedImagePath.value.isEmpty
+                                    ? const Icon(
+                                        Icons.person,
+                                        size: 40,
+                                        color: Colors.white,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+
+                            // Name & Email
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.user.value?.name ??
+                                        'Profil Pengguna',
+                                    style: AppTextStyles.bodyLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    controller.user.value?.email ??
+                                        'user@example.com',
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Edit Button
+                            OutlinedButton.icon(
+                              onPressed: () => Get.toNamed('/edit-profile'),
+                              icon: const Icon(Icons.edit_outlined, size: 14),
+                              label: const Text('Ubah'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.black87,
+                                side: BorderSide(color: Colors.grey.shade400),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                textStyle: const TextStyle(fontSize: 13),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // ── Info Pribadi ──────────────────────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'Info Pribadi',
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: [
+                          _buildInfoItem(
+                            icon: Icons.person_outline,
+                            label: 'Nama',
+                            value:
+                                controller.user.value?.name ?? 'Belum Terisi',
+                          ),
+                          const Divider(height: 1, indent: 56),
+                          _buildInfoItem(
+                            icon: Icons.phone_outlined,
+                            label: 'Nomer Telepon',
+                            value:
+                                controller.user.value?.phoneNumber ??
+                                'Belum Terisi',
+                          ),
+                          const Divider(height: 1, indent: 56),
+                          _buildInfoItem(
+                            icon: Icons.calendar_today_outlined,
+                            label: 'Tanggal Lahir',
+                            value:
+                                controller.user.value?.birthDate ??
+                                'Belum Terisi',
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // ── Log Out Button ────────────────────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () => _showLogoutDialog(),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.errorNormal,
+                            side: BorderSide(color: AppColors.errorNormal),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            'Log Out',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.errorNormal,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+                  ],
                 ),
               ),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: AppColors.primaryNormal,
-                    child: const Icon(
-                      Icons.person,
-                      size: 60,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Nama Pengguna',
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'user@example.com',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.grayNormal,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            // Profile Menu Items
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  _buildProfileMenuItem(
-                    icon: Icons.person_outline,
-                    title: 'Profil Saya',
-                    onTap: () {
-                      // Handle profile edit
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildProfileMenuItem(
-                    icon: Icons.location_on_outlined,
-                    title: 'Alamat',
-                    onTap: () {
-                      // Handle address
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildProfileMenuItem(
-                    icon: Icons.payment_outlined,
-                    title: 'Metode Pembayaran',
-                    onTap: () {
-                      // Handle payment method
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildProfileMenuItem(
-                    icon: Icons.notifications_outlined,
-                    title: 'Notifikasi',
-                    onTap: () {
-                      // Handle notifications
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildProfileMenuItem(
-                    icon: Icons.help_outline,
-                    title: 'Bantuan & Support',
-                    onTap: () {
-                      // Handle help
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  _buildProfileMenuItem(
-                    icon: Icons.logout_outlined,
-                    title: 'Keluar',
-                    onTap: () {
-                      _showLogoutDialog();
-                    },
-                    isLogout: true,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
-        ),
       ),
       bottomNavigationBar: CustomBottomNavbar(
         currentIndex: 2,
@@ -129,48 +207,37 @@ class ProfileView extends GetView<ProfileController> {
     );
   }
 
-  Widget _buildProfileMenuItem({
+  Widget _buildInfoItem({
     required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-    bool isLogout = false,
+    required String label,
+    required String value,
   }) {
-    return Material(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.grayLight),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      child: Row(
+        children: [
+          Icon(icon, color: AppColors.grayNormal, size: 22),
+          const SizedBox(width: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                icon,
-                color: isLogout
-                    ? AppColors.errorNormal
-                    : AppColors.primaryNormal,
-                size: 24,
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  title,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: isLogout ? AppColors.errorNormal : Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
+              Text(
+                label,
+                style: AppTextStyles.bodySmall.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: AppColors.grayNormal,
-                size: 16,
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: AppColors.grayNormal,
+                ),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -182,14 +249,24 @@ class ProfileView extends GetView<ProfileController> {
         content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
         actions: [
           TextButton(onPressed: () => Get.back(), child: const Text('Batal')),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              controller.logout();
-            },
-            child: Text(
-              'Keluar',
-              style: TextStyle(color: AppColors.errorNormal),
+          Obx(
+            () => TextButton(
+              onPressed: controller.isLoading.value
+                  ? null
+                  : () async {
+                      Get.back();
+                      await controller.logout();
+                    },
+              child: controller.isLoading.value
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(
+                      'Keluar',
+                      style: TextStyle(color: AppColors.errorNormal),
+                    ),
             ),
           ),
         ],

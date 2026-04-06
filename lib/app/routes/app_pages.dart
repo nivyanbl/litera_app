@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:litera/app/modules/profile/views/edit_profile_view.dart';
 
 import '../modules/book_access/views/book_access_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
@@ -72,5 +73,6 @@ class AppPages {
       page: () => const ProfileView(),
       binding: ProfileBinding(),
     ),
+    GetPage(name: '/edit-profile', page: () => const EditProfileView()),
   ];
 }

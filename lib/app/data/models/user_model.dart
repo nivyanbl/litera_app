@@ -3,6 +3,9 @@ class UserModel {
   final int id;
   final String name;
   final String email;
+  final String phoneNumber;
+  final String birthDate;
+  late final String profilePicture;
   final String role;
 
   UserModel({
@@ -11,18 +14,21 @@ class UserModel {
     required this.name,
     required this.email,
     required this.role,
+    required this.phoneNumber,
+    required this.birthDate,
+    required this.profilePicture,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    final data = (json['data'] as Map<String, dynamic>? ) ?? {};
-    final user = (data['user'] as Map<String, dynamic>? ) ?? {};
+    final data = (json['data'] as Map<String, dynamic>?) ?? {};
+    final user = (data['user'] as Map<String, dynamic>?) ?? {};
 
     final dynamic rawId = user['id'];
     final int parsedId = rawId is int
         ? rawId
         : rawId is num
-            ? rawId.toInt()
-            : int.tryParse(rawId?.toString() ?? '') ?? 0;
+        ? rawId.toInt()
+        : int.tryParse(rawId?.toString() ?? '') ?? 0;
 
     return UserModel(
       token: (data['token'] ?? '').toString(),
@@ -30,6 +36,9 @@ class UserModel {
       name: (user['name'] ?? '').toString(),
       email: (user['email'] ?? '').toString(),
       role: (user['role'] ?? '').toString(),
+      phoneNumber: (user['phone_number'] ?? '').toString(),
+      birthDate: (user['birth_date'] ?? '').toString(),
+      profilePicture: (user['profile_picture'] ?? '').toString(),
     );
   }
 }
