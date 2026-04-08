@@ -6,12 +6,14 @@ class ProductCard extends StatelessWidget {
   final ProductModel product;
   final VoidCallback onTap;
   final VoidCallback onDelete;
+  final VoidCallback? onEdit;
 
   const ProductCard({
     super.key,
     required this.product,
     required this.onTap,
     required this.onDelete,
+    this.onEdit,
   });
 
   @override
@@ -31,8 +33,8 @@ class ProductCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 128,
-        padding: const EdgeInsets.all(12),
+        height: 100,
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -49,7 +51,7 @@ class ProductCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   // Category Badge
                   if (product.category != null)
@@ -76,21 +78,9 @@ class ProductCard extends StatelessWidget {
                   Text(
                     product.title,
                     style: const TextStyle(
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF1A1A2E),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                  // Author
-                  Text(
-                    product.author,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
-                      fontWeight: FontWeight.w400,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -103,7 +93,7 @@ class ProductCard extends StatelessWidget {
                       Text(
                         priceFormat.format(product.price),
                         style: const TextStyle(
-                          fontSize: 13,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -162,25 +152,60 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(width: 8),
 
-            // Delete Button
-            GestureDetector(
-              onTap: onDelete,
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Colors.red.shade50,
-                  border: Border.all(color: Colors.red.shade300, width: 0.8),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.delete_outline_rounded,
-                    size: 16,
-                    color: Colors.red.shade600,
+            // Action Buttons (Edit & Delete)
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Edit Button
+                if (onEdit != null)
+                  GestureDetector(
+                    onTap: onEdit,
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0F3FF),
+                        border: Border.all(
+                          color: const Color(0xFFB6CDEB),
+                          width: 0.8,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.edit_outlined,
+                          size: 16,
+                          color: Color(0xFF1565C0),
+                        ),
+                      ),
+                    ),
+                  ),
+                const SizedBox(width: 6),
+
+                // Delete Button
+                GestureDetector(
+                  onTap: onDelete,
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      border: Border.all(
+                        color: Colors.red.shade300,
+                        width: 0.8,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.delete_outline_rounded,
+                        size: 16,
+                        color: Colors.red.shade600,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
@@ -192,22 +217,22 @@ class ProductCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        width: 76,
-        height: 104,
-        color: const Color(0xFFF1F5FB),
+        width: 68,
+        height: 90,
+        color: Colors.white.withValues(alpha: 0.5),
         child: hasImage
             ? Image.network(
                 product.image!,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
                 errorBuilder: (_, _, _) => const Icon(
                   Icons.menu_book_rounded,
-                  size: 32,
+                  size: 28,
                   color: Color(0xFF4A90E2),
                 ),
               )
             : const Icon(
                 Icons.menu_book_rounded,
-                size: 32,
+                size: 28,
                 color: Color(0xFF4A90E2),
               ),
       ),
