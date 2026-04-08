@@ -39,7 +39,7 @@ class HomeHeader extends GetView<HomeController> {
           ),
           const SizedBox(width: 10),
           GestureDetector(
-            onTap: () => Get.toNamed(Routes.CART),
+            onTap: () => Get.toNamed(Routes.cart),
             child: const Icon(
               Icons.shopping_cart_outlined,
               color: Colors.black,

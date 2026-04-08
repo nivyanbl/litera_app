@@ -72,7 +72,7 @@ class LoginController extends GetxController {
       final user = await authRepository.login(email, password);
 
       if (user.role == 'admin') {
-        Get.offAllNamed(Routes.ADMIN_DASHBOARD);
+        Get.offAllNamed(Routes.adminDashboard);
         return;
       }
       if (redirect != null && redirect.isNotEmpty) {
@@ -80,7 +80,7 @@ class LoginController extends GetxController {
         return;
       }
 
-      Get.offAllNamed(Routes.HOME);
+      Get.offAllNamed(Routes.home);
     } catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '');
       final lower = message.toLowerCase();

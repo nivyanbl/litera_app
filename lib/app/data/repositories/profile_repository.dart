@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import '../models/user_model.dart';
 import '../providers/profile_provider.dart';
 
@@ -23,7 +25,7 @@ class ProfileRepository {
       await provider.updateProfile(data: data, imagePath: imagePath);
       return true;
     } catch (e) {
-      print('Exception in updateProfile: $e');
+      Get.log('Exception in updateProfile: $e');
       rethrow;
     }
   }
@@ -32,7 +34,7 @@ class ProfileRepository {
     try {
       await provider.logout();
     } catch (e) {
-      print('Error logging out: $e');
+      Get.log('Error logging out: $e');
       rethrow;
     }
   }

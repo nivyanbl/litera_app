@@ -19,7 +19,7 @@ class ProductCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
         onTap: () {
           Get.toNamed(
-            Routes.PRODUCT_DETAIL,
+            Routes.productDetail,
             arguments: {'product': product, 'imageUrl': imageUrl},
           );
         },

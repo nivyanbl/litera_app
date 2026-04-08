@@ -51,10 +51,10 @@ class BookAccessView extends GetView<BookAccessController> {
             autoSpacing: false,
             pageFling: false,
             onError: (error) {
-              print('Error PDF: $error');
+              Get.log('Error PDF: $error');
             },
             onPageError: (page, error) {
-              print('Error Page $page: $error');
+              Get.log('Error Page $page: $error');
             },
           );
         }

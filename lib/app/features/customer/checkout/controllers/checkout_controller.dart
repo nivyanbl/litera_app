@@ -112,7 +112,7 @@ class CheckoutController extends GetxController {
         await cartC.fetchCarts();
 
         Get.snackbar('Sukses', result.message);
-        Get.offAllNamed(Routes.ORDER_HISTORY);
+        Get.offAllNamed(Routes.orderHistory);
       } else {
         Get.snackbar('Error', 'URL pembayaran kosong');
       }

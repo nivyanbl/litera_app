@@ -70,7 +70,7 @@ class ProductDetailController extends GetxController {
         _checkDownloadStatus();
       }
     } catch (e) {
-      print("Gagal mengecek kepemilikan: $e");
+      Get.log("Gagal mengecek kepemilikan: $e");
     } finally {
       isLoadingOwnership.value = false;
     }
@@ -86,7 +86,7 @@ class ProductDetailController extends GetxController {
 
   void goToReadBook() {
     Get.toNamed(
-      Routes.BOOK_ACCESS,
+      Routes.bookAccess,
       arguments: {'product_id': product.id, 'title': product.title},
     );
   }
@@ -94,7 +94,7 @@ class ProductDetailController extends GetxController {
   Future<void> handleBuyNow() async {
     if (!await _ensureLoggedIn()) return;
     await Get.toNamed(
-      Routes.CHECKOUT,
+      Routes.checkout,
       arguments: {'source': 'direct', 'product': product},
     );
   }
@@ -109,7 +109,7 @@ class ProductDetailController extends GetxController {
         'Produk ditambahkan ke keranjang',
         snackPosition: SnackPosition.TOP,
       );
-      await Get.toNamed(Routes.CART);
+      await Get.toNamed(Routes.cart);
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -121,7 +121,7 @@ class ProductDetailController extends GetxController {
 
   Future<void> handleCartIcon() async {
     if (!await _ensureLoggedIn()) return;
-    await Get.toNamed(Routes.CART);
+    await Get.toNamed(Routes.cart);
   }
 
   Future<void> handleLoveTap() async {
@@ -194,9 +194,9 @@ class ProductDetailController extends GetxController {
     );
 
     await Get.toNamed(
-      Routes.LOGIN,
+      Routes.login,
       arguments: {
-        'redirect': Routes.PRODUCT_DETAIL,
+        'redirect': Routes.productDetail,
         'redirectArgs': Get.arguments,
       },
     );

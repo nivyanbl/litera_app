@@ -58,21 +58,7 @@ class _FilterChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isActive ? AppColors.primaryNormal : Colors.white,
           borderRadius: BorderRadius.circular(24),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: AppColors.primaryNormal.withOpacity(0.30),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+          border: Border.all(color: AppColors.grayLight, width: 1),
         ),
         child: Text(
           label,

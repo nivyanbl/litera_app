@@ -89,7 +89,7 @@ class RegisterController extends GetxController {
         return;
       }
 
-      Get.offAllNamed(Routes.HOME);
+      Get.offAllNamed(Routes.home);
     } catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '');
       final lower = message.toLowerCase();
