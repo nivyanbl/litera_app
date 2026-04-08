@@ -1,101 +1,170 @@
 import 'package:flutter/material.dart';
+import 'package:litera/app/core/theme/app_colors.dart';
+
+enum ProductCardVariant { bestSeller, mostCarted }
 
 class ProductCardWidget extends StatelessWidget {
-  final String productTitle;
-  final int totalSold;
-  final int index;
+  final int rank;
+  final String title;
+  final String imageUrl;
+  final int count;
+  final ProductCardVariant variant;
 
   const ProductCardWidget({
     super.key,
-    required this.productTitle,
-    required this.totalSold,
-    required this.index,
+    required this.rank,
+    required this.title,
+    required this.imageUrl,
+    required this.count,
+    this.variant = ProductCardVariant.bestSeller,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = [
-      Colors.blue.shade100,
-      Colors.purple.shade100,
-      Colors.orange.shade100,
-      Colors.green.shade100,
-    ];
-
-    final iconColors = [
-      Colors.blue.shade600,
-      Colors.purple.shade600,
-      Colors.orange.shade600,
-      Colors.green.shade600,
-    ];
-
     return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 2),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          // Product Icon/Thumbnail
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: colors[index % colors.length],
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Center(
-              child: Icon(
-                Icons.book_rounded,
-                color: iconColors[index % iconColors.length],
-                size: 28,
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          // Product Info
+          // Rank badge
+          _RankBadge(rank: rank, variant: variant),
+          const SizedBox(width: 12),
+
+          // Product thumbnail
+          _ProductThumbnail(imageUrl: imageUrl),
+          const SizedBox(width: 12),
+
+          // Title
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  productTitle,
-                  maxLines: 1,
+                  title,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.grey.shade900,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.grayDarker,
+                    height: 1.3,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  'Terjual: $totalSold eksemplar',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                _CountBadge(count: count, variant: variant),
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          // Arrow Icon
-          Icon(
-            Icons.chevron_right_rounded,
-            color: Colors.grey.shade400,
-            size: 24,
-          ),
         ],
       ),
+    );
+  }
+}
+
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
+class _RankBadge extends StatelessWidget {
+  final int rank;
+  final ProductCardVariant variant;
+
+  const _RankBadge({required this.rank, required this.variant});
+
+  @override
+  Widget build(BuildContext context) {
+    final isTop = rank == 1;
+    final color = isTop ? const Color(0xFFFFB020) : AppColors.primaryLight;
+    final textColor = isTop ? const Color(0xFF7A5100) : AppColors.primaryNormal;
+
+    return Container(
+      width: 28,
+      height: 28,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      child: Text(
+        '#$rank',
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w700,
+          color: textColor,
+        ),
+      ),
+    );
+  }
+}
+
+class _ProductThumbnail extends StatelessWidget {
+  final String imageUrl;
+
+  const _ProductThumbnail({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: AppColors.primaryLight,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: imageUrl.isNotEmpty
+          ? Image.network(
+              imageUrl,
+              fit: BoxFit.cover,
+              cacheHeight: 44,
+              cacheWidth: 44,
+              errorBuilder: (_, __, ___) => _PlaceholderIcon(),
+            )
+          : _PlaceholderIcon(),
+    );
+  }
+}
+
+class _PlaceholderIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Icon(Icons.book_rounded, color: AppColors.primaryNormal, size: 22);
+  }
+}
+
+class _CountBadge extends StatelessWidget {
+  final int count;
+  final ProductCardVariant variant;
+
+  const _CountBadge({required this.count, required this.variant});
+
+  @override
+  Widget build(BuildContext context) {
+    final isSeller = variant == ProductCardVariant.bestSeller;
+    final icon = isSeller
+        ? Icons.shopping_bag_outlined
+        : Icons.shopping_cart_outlined;
+    final label = isSeller ? 'terjual' : 'di keranjang';
+
+    return Row(
+      children: [
+        Icon(icon, size: 12, color: AppColors.primaryDark),
+        const SizedBox(width: 4),
+        Text(
+          '$count $label',
+          style: TextStyle(
+            fontSize: 12,
+            color: AppColors.primaryDark,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,131 +1,107 @@
 import 'package:get/get.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:litera/app/core/network/api_client.dart';
 import 'package:litera/app/data/models/admin_dashboard_model.dart';
+import 'package:litera/app/data/repositories/admin_dashboard_repository.dart';
 
 class AdminDashboardController extends GetxController {
-  var isLoading = true.obs;
-  var dashboardData = AdminDashboardModel().obs;
+  // ─── Dependencies ────────────────────────────────────────────────────────────
+  final AdminDashboardRepository _repository;
 
-  // State Management
-  var selectedPeriodIndex = 0.obs;
-  var bottomNavIndex = 0.obs;
-  var chartSpots = <FlSpot>[].obs;
-  var chartLabels = <String>[].obs;
-  var chartMaxY = 75.0.obs;
+  // ─── State ──────────────────────────────────────────────────────────────────
+  final RxInt selectedDays = 7.obs;
+  final Rx<DashboardModel?> dashboardData = Rx<DashboardModel?>(null);
+  final RxBool isLoading = false.obs;
+  final RxString errorMessage = ''.obs;
 
-  // Period options
-  final periods = ['7 Hari', '30 Hari', '90 Hari'];
-  final periodDays = [7, 30, 90];
+  // ─── Derived chart data ──────────────────────────────────────────────────────
+  final RxList<FlSpot> chartSpots = <FlSpot>[].obs;
+  final RxList<String> chartLabels = <String>[].obs;
+  final RxDouble chartMaxY = 100000.0.obs;
 
+  // ─── Constructor ─────────────────────────────────────────────────────────────
+  AdminDashboardController({required AdminDashboardRepository repository})
+      : _repository = repository;
+
+  // ─── Lifecycle ───────────────────────────────────────────────────────────────
   @override
   void onInit() {
     super.onInit();
     fetchDashboardData();
-    // Auto-refetch when period changes
-    ever(selectedPeriodIndex, (_) => _refreshChartData());
   }
 
-  Future<void> fetchDashboardData({int? days}) async {
+  // ─── Public API ──────────────────────────────────────────────────────────────
+  void onPeriodChanged(int days) {
+    if (selectedDays.value == days) return;
+    selectedDays.value = days;
+    fetchDashboardData();
+  }
+
+  Future<void> fetchDashboardData() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+
     try {
-      isLoading(true);
-
-      // Use selected period days if not specified
-      days ??= periodDays[selectedPeriodIndex.value];
-
-      // Fetch data with period parameter
-      final response = await ApiClient().get('/admin/dashboard?days=$days');
-
-      if (response.statusCode == 200) {
-        final dashData = AdminDashboardModel.fromJson(response.data['data']);
-        dashboardData.value = dashData;
-
-        // Convert chart data if available
-        _processChartData(dashData);
-      } else {
-        Get.snackbar("Info", "Gagal memuat data dashboard");
-        _setDefaultChartData();
-      }
+      final model = await _repository.getDashboard(days: selectedDays.value);
+      dashboardData.value = model;
+      _buildChartData(model.chartData);
     } catch (e) {
-      Get.snackbar("Error", "Terjadi kesalahan server");
-      print("Error Dashboard: $e");
-      _setDefaultChartData();
+      errorMessage.value = e.toString().replaceAll('Exception: ', '');
+      dashboardData.value = null;
+      chartSpots.clear();
+      chartLabels.clear();
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
-  Future<void> _refreshChartData() async {
-    try {
-      final days = periodDays[selectedPeriodIndex.value];
-      final response = await ApiClient().get('/admin/dashboard?days=$days');
-
-      if (response.statusCode == 200) {
-        final dashData = AdminDashboardModel.fromJson(response.data['data']);
-        dashboardData.value = dashData;
-        _processChartData(dashData);
-      } else {
-        _setDefaultChartData();
-      }
-    } catch (e) {
-      print("Error refreshing chart: $e");
-      _setDefaultChartData();
+  // ─── Helpers ─────────────────────────────────────────────────────────────────
+  void _buildChartData(List<ChartDataModel> data) {
+    if (data.isEmpty) {
+      chartSpots.clear();
+      chartLabels.clear();
+      chartMaxY.value = 100000;
+      return;
     }
-  }
 
-  /// Process chart data from API response
-  void _processChartData(AdminDashboardModel data) {
-    // If API provides chartData, use it; otherwise use sample data
-    if (data.chartData != null && data.chartData!.isNotEmpty) {
-      // Extract labels and map to FlSpots
-      final labels = <String>[];
-      final spots = <FlSpot>[];
+    final spots = <FlSpot>[];
+    final labels = <String>[];
+    double maxRevenue = 0;
 
-      for (int i = 0; i < data.chartData!.length; i++) {
-        final item = data.chartData![i];
-        labels.add(item['label']?.toString() ?? 'N/A');
-        spots.add(
-          FlSpot(i.toDouble(), (item['revenue'] as num?)?.toDouble() ?? 0.0),
-        );
-      }
-
-      chartLabels.value = labels;
-      chartSpots.value = spots;
-
-      // Calculate max Y for chart
-      final maxRevenue = spots.isEmpty
-          ? 75.0
-          : spots.map((e) => e.y).reduce((a, b) => a > b ? a : b);
-      chartMaxY.value = (maxRevenue * 1.2); // Add 20% padding
-    } else {
-      // Use default sample data
-      _setDefaultChartData();
+    for (int i = 0; i < data.length; i++) {
+      final revenue = data[i].revenue;
+      spots.add(FlSpot(i.toDouble(), revenue));
+      labels.add(data[i].label);
+      if (revenue > maxRevenue) maxRevenue = revenue;
     }
+
+    chartSpots.value = spots;
+    chartLabels.value = labels;
+
+    // Add 20% headroom above the tallest bar dynamically from backend data
+    chartMaxY.value = maxRevenue > 0 ? maxRevenue * 1.2 : 100000.0;
   }
 
-  /// Set default chart data (sample)
-  void _setDefaultChartData() {
-    chartLabels.value = const ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    chartSpots.value = const [
-      FlSpot(0, 35),
-      FlSpot(1, 42),
-      FlSpot(2, 38),
-      FlSpot(3, 50),
-      FlSpot(4, 55),
-      FlSpot(5, 48),
-      FlSpot(6, 60),
-    ];
-    chartMaxY.value = 75.0;
+  String get formattedRevenue {
+    final revenue = dashboardData.value?.totalRevenue ?? 0;
+    return _formatCurrency(revenue);
   }
 
-  /// Update period selection
-  void selectPeriod(int index) {
-    selectedPeriodIndex.value = index;
-    // ever() listener will trigger _refreshChartData() automatically
+  String _formatCurrency(double amount) {
+    final formatted = amount.toStringAsFixed(0);
+    final buffer = StringBuffer();
+    int counter = 0;
+    for (int i = formatted.length - 1; i >= 0; i--) {
+      if (counter > 0 && counter % 3 == 0) buffer.write('.');
+      buffer.write(formatted[i]);
+      counter++;
+    }
+    return 'Rp ${buffer.toString().split('').reversed.join()}';
   }
 
-  /// Update bottom nav selection
-  void selectBottomNav(int index) {
-    bottomNavIndex.value = index;
+  /// Used by chart to format Y-axis labels (shortened)
+  String formatYLabel(double value) {
+    if (value >= 1000000) return '${(value / 1000000).toStringAsFixed(1)}jt';
+    if (value >= 1000) return '${(value / 1000).toStringAsFixed(0)}rb';
+    return value.toStringAsFixed(0);
   }
 }

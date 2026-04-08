@@ -14,6 +14,10 @@ void main() async {
   await GetStorage.init();
   await dotenv.load(fileName: ".env");
 
+  imageCache.maximumSizeBytes =
+      50 * 1024 * 1024; 
+  imageCache.maximumSize = 100; 
+
   // Inisialisasi services global
   Get.put(ApiClient(), permanent: true);
   Get.put(DownloadService(), permanent: true);
