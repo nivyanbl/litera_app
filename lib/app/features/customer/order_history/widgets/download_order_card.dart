@@ -101,7 +101,7 @@ class _DownloadOrderCardState extends State<DownloadOrderCard> {
       onPressed: () {
         // Navigate ke BookAccessView
         Get.toNamed(
-          Routes.BOOK_ACCESS,
+          Routes.bookAccess,
           arguments: {
             'product_id': widget.detail.productId,
             'title': widget.detail.product?.title ?? 'Buku',

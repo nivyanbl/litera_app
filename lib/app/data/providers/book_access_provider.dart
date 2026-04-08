@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../core/network/api_client.dart';
 import '../models/reading_stat_model.dart';
@@ -17,7 +18,7 @@ class BookAccessProvider {
       await apiClient.download('/books/$productId/read', file.path);
       return file;
     } catch (e) {
-      print("Error read PDF: $e");
+      Get.log("Error read PDF: $e");
       return null;
     }
   }
@@ -40,7 +41,7 @@ class BookAccessProvider {
       );
       return true;
     } catch (e) {
-      print("Error download PDF: $e");
+      Get.log("Error download PDF: $e");
       return false;
     }
   }
@@ -56,7 +57,7 @@ class BookAccessProvider {
       if (data is! List) return [];
       return data.map((e) => ReadingStatModel.fromJson(e as Map<String, dynamic>)).toList();
     } catch (e) {
-      print("Error get stats: $e");
+      Get.log("Error get stats: $e");
       return [];
     }
   }

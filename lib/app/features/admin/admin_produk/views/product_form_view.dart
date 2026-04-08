@@ -164,7 +164,7 @@ class _ProductFormViewState extends State<ProductFormView> {
 
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.first;
-      final fileSizeInMB = (file.size ?? 0) / (1024 * 1024);
+      final fileSizeInMB = (file.size) / (1024 * 1024);
 
       // Warn if file is large
       if (fileSizeInMB > 10) {
@@ -413,7 +413,7 @@ class _ProductFormViewState extends State<ProductFormView> {
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -427,7 +427,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                 height: 42,
                 width: 42,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4A90E2).withOpacity(0.10),
+                  color: const Color(0xFF4A90E2).withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: const Color(0xFF4A90E2)),
@@ -461,7 +461,7 @@ class _ProductFormViewState extends State<ProductFormView> {
         : null;
 
     return DropdownButtonFormField<int>(
-      value: validValue,
+      initialValue: validValue,
       decoration: _inputDecoration('Category'),
       items: controller.categories.map((CategoryModel category) {
         return DropdownMenuItem<int>(
@@ -592,7 +592,7 @@ class _ProductFormViewState extends State<ProductFormView> {
     final isNewProduct = widget.product == null;
     final isPdfSelected = selectedPdfFile != null || pdfName != null;
     final pdfSizeMB = selectedPdfFile != null
-        ? (selectedPdfFile!.size ?? 0) / (1024 * 1024)
+        ? (selectedPdfFile!.size) / (1024 * 1024)
         : null;
 
     return Column(
@@ -622,7 +622,7 @@ class _ProductFormViewState extends State<ProductFormView> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isNewProduct && !isPdfSelected
-                  ? Colors.red.withOpacity(0.5)
+                  ? Colors.red.withValues(alpha: 0.5)
                   : const Color(0xFFE3E8F0),
             ),
           ),

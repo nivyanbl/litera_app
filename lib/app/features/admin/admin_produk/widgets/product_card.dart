@@ -199,7 +199,7 @@ class ProductCard extends StatelessWidget {
             ? Image.network(
                 product.image!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(
+                errorBuilder: (_, _, _) => const Icon(
                   Icons.menu_book_rounded,
                   size: 32,
                   color: Color(0xFF4A90E2),

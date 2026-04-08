@@ -86,7 +86,7 @@ Widget _categoryChip(String label, {bool isActive = false}) {
     margin: const EdgeInsets.only(right: 12),
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
     decoration: ShapeDecoration(
-      color: isActive ? AppColors.primaryNormal.withOpacity(0.1) : Colors.white, 
+      color: isActive ? AppColors.primaryNormal.withValues(alpha: 0.1) : Colors.white, 
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: isActive ? AppColors.primaryNormal : const Color(0xFFC8C8CC), 

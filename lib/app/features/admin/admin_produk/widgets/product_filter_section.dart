@@ -9,12 +9,12 @@ class ProductFilterSection extends StatelessWidget {
   final RxnInt selectedCategoryId;
 
   const ProductFilterSection({
-    Key? key,
+    super.key,
     required this.selectedSort,
     required this.onlyAvailable,
     required this.categories,
     required this.selectedCategoryId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ProductFilterSection extends StatelessWidget {
             Expanded(
               child: Obx(
                 () => DropdownButtonFormField<String>(
-                  value: selectedSort.value,
+                  initialValue: selectedSort.value,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                     border: OutlineInputBorder(
@@ -66,7 +66,7 @@ class ProductFilterSection extends StatelessWidget {
                   ),
                   Switch(
                     value: onlyAvailable.value,
-                    activeColor: Colors.blueAccent,
+                    activeThumbColor: Colors.blueAccent,
                     onChanged: (val) => onlyAvailable.value = val,
                   ),
                 ],

@@ -29,7 +29,7 @@ class DownloadService extends GetxService {
       }
       // Jika data tidak valid atau tidak ada, mulai dengan map kosong
     } catch (e) {
-      print('Error loading downloaded books: $e');
+      Get.log('Error loading downloaded books: $e');
       downloadedBooks.clear();
     }
   }

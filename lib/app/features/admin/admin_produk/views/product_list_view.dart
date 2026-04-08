@@ -101,7 +101,7 @@ class ProductListView extends GetView<AdminProdukController> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF4A90E2).withOpacity(0.3),
+              color: const Color(0xFF4A90E2).withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),

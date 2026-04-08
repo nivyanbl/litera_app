@@ -124,7 +124,7 @@ class _ProductThumbnail extends StatelessWidget {
               fit: BoxFit.cover,
               // cacheHeight: 100,
               // cacheWidth: 100,
-              errorBuilder: (_, __, ___) => _PlaceholderIcon(),
+              errorBuilder: (_, _, _) => _PlaceholderIcon(),
             )
           : _PlaceholderIcon(),
     );

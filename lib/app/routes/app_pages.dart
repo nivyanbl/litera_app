@@ -29,62 +29,62 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const initial = Routes.home;
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
+      name: _Paths.home,
       page: () => const HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.LOGIN,
+      name: _Paths.login,
       page: () => const LoginView(),
       binding: LoginBinding(),
     ),
     GetPage(
-      name: _Paths.REGISTER,
+      name: _Paths.register,
       page: () => const RegisterView(),
       binding: RegisterBinding(),
     ),
     GetPage(
-      name: _Paths.PRODUCT_DETAIL,
+      name: _Paths.productDetail,
       page: () => const ProductDetailView(),
       binding: ProductDetailBinding(),
     ),
     GetPage(
-      name: _Paths.CART,
+      name: _Paths.cart,
       page: () => const CartView(),
       binding: CartBinding(),
     ),
     GetPage(
-      name: _Paths.CHECKOUT,
+      name: _Paths.checkout,
       page: () => const CheckoutView(),
       binding: CheckoutBinding(),
     ),
     GetPage(
-      name: _Paths.ORDER_HISTORY,
+      name: _Paths.orderHistory,
       page: () => const OrderHistoryView(),
       binding: OrderHistoryBinding(),
     ),
     GetPage(
-      name: _Paths.BOOK_ACCESS,
+      name: _Paths.bookAccess,
       page: () => const BookAccessView(),
       binding: BookAccessBinding(),
     ),
     GetPage(
-      name: _Paths.PROFILE,
+      name: _Paths.profile,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
     ),
     GetPage(name: '/edit-profile', page: () => const EditProfileView()),
     GetPage(
-      name: _Paths.ADMIN_DASHBOARD,
+      name: _Paths.adminDashboard,
       page: () => const AdminDashboardView(),
       binding: AdminDashboardBinding(),
     ),
     GetPage(
-      name: _Paths.ADMIN_PRODUK,
+      name: _Paths.adminProduk,
       page: () => const ProductListView(),
       binding: AdminProdukBinding(),
     ),

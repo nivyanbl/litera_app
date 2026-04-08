@@ -26,7 +26,7 @@ void main() async {
     GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "litera",
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       theme: AppTheme.lightTheme.copyWith(
         appBarTheme: AppTheme.lightTheme.appBarTheme.copyWith(

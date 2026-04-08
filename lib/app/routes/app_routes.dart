@@ -1,32 +1,33 @@
-part of 'app_pages.dart';
-// DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
+  part of 'app_pages.dart';
+  // DO NOT EDIT. This is code generated via package:get_cli/get_cli.dart
 
-abstract class Routes {
-  Routes._();
-  static const HOME = _Paths.HOME;
-  static const LOGIN = _Paths.LOGIN;
-  static const REGISTER = _Paths.REGISTER;
-  static const PRODUCT_DETAIL = _Paths.PRODUCT_DETAIL;
-  static const CART = _Paths.CART;
-  static const CHECKOUT = _Paths.CHECKOUT;
-  static const ORDER_HISTORY = _Paths.ORDER_HISTORY;
-  static const BOOK_ACCESS = _Paths.BOOK_ACCESS;
-  static const PROFILE = _Paths.PROFILE;
-  static const ADMIN_DASHBOARD = _Paths.ADMIN_DASHBOARD;
-  static const ADMIN_PRODUK = _Paths.ADMIN_PRODUK;
-}
+  abstract class Routes {
+    Routes._();
+    static const home = _Paths.home;
+    static const login = _Paths.login;
+    static const register = _Paths.register;
+    static const productDetail = _Paths.productDetail;
+    static const cart = _Paths.cart;
+    static const checkout = _Paths.checkout;
+    static const orderHistory = _Paths.orderHistory;
+    static const bookAccess = _Paths.bookAccess;
+    static const profile = _Paths.profile;
+    static const adminDashboard = _Paths.adminDashboard;
+    static const adminProduk = _Paths.adminProduk;
+  }
 
-abstract class _Paths {
-  _Paths._();
-  static const HOME = '/home';
-  static const LOGIN = '/login';
-  static const REGISTER = '/register';
-  static const PRODUCT_DETAIL = '/product-detail';
-  static const CART = '/cart';
-  static const CHECKOUT = '/checkout';
-  static const ORDER_HISTORY = '/order-history';
-  static const BOOK_ACCESS = '/book-access';
-  static const PROFILE = '/profile';
-  static const ADMIN_DASHBOARD = '/admin-dashboard';
-  static const ADMIN_PRODUK = '/admin-produk';
-}
+  abstract class _Paths {
+    _Paths._();
+
+    static const home = '/home';
+    static const login = '/login';
+    static const register = '/register';
+    static const productDetail = '/product-detail';
+    static const cart = '/cart';
+    static const checkout = '/checkout';
+    static const orderHistory = '/order-history';
+    static const bookAccess = '/book-access';
+    static const profile = '/profile';
+    static const adminDashboard = '/admin-dashboard';
+    static const adminProduk = '/admin-produk';
+  }

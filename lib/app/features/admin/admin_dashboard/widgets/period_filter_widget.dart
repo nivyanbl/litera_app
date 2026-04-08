@@ -61,14 +61,14 @@ class _FilterChip extends StatelessWidget {
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: AppColors.primaryNormal.withOpacity(0.30),
+                    color: AppColors.primaryNormal.withValues(alpha: 0.30),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
                 ]
               : [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: Colors.black.withValues(alpha: 0.06),
                     blurRadius: 6,
                     offset: const Offset(0, 2),
                   ),

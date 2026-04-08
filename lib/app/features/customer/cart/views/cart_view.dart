@@ -39,7 +39,7 @@ class CartView extends GetView<CartController> {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       itemCount: controller.cartList.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, _) => const SizedBox(height: 10),
       itemBuilder: (_, index) => _buildCartItem(index),
     );
   }
@@ -115,7 +115,7 @@ class CartView extends GetView<CartController> {
               width: 76,
               height: 100,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) => _coverPlaceholder(),
+              errorBuilder: (_, _, _) => _coverPlaceholder(),
             )
           : _coverPlaceholder(),
     );
@@ -236,7 +236,7 @@ class CartView extends GetView<CartController> {
           CustomButton(
             text: 'Mulai Belanja',
             isLoading: false,
-            onPressed: () => Get.toNamed(Routes.HOME),
+            onPressed: () => Get.toNamed(Routes.home),
           ),
         ],
       ),
@@ -345,7 +345,7 @@ class CartView extends GetView<CartController> {
                     onPressed: controller.selectedCount > 0
                         ? () {
                             Get.toNamed(
-                              Routes.CHECKOUT,
+                              Routes.checkout,
                               arguments: {'source': 'cart'},
                             );
                           }

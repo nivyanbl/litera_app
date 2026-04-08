@@ -363,7 +363,7 @@ class _OrderPaymentDetailViewState extends State<OrderPaymentDetailView> {
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        onPressed: () => Get.offAllNamed(Routes.HOME),
+        onPressed: () => Get.offAllNamed(Routes.home),
         child: const Text('Beli Lagi'),
       ),
     );
