@@ -16,7 +16,7 @@ class AdminDashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Controller is injected via AdminDashboardBinding
     return Scaffold(
-      backgroundColor: AppColors.grayLight,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: RefreshIndicator(
           color: AppColors.primaryDark,
@@ -98,7 +98,6 @@ class AdminDashboardView extends StatelessWidget {
                   child: SectionTitleWidget(
                     title: 'Best Seller',
                     subtitle: 'Produk paling banyak terjual',
-                    trailing: _SeeAllButton(),
                   ),
                 ),
               ),
@@ -116,7 +115,6 @@ class AdminDashboardView extends StatelessWidget {
                   child: SectionTitleWidget(
                     title: 'Paling Banyak Dilirik',
                     subtitle: 'Sering ditambah ke keranjang',
-                    trailing: _SeeAllButton(),
                   ),
                 ),
               ),
@@ -183,14 +181,6 @@ class _BestSellerList extends StatelessWidget {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          'Lihat semua (${list.length})',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primaryNormal,
-                          ),
-                        ),
                       ),
                     ),
                   ),
@@ -258,14 +248,6 @@ class _MostCartedList extends StatelessWidget {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          'Lihat semua (${list.length})',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primaryNormal,
-                          ),
-                        ),
                       ),
                     ),
                   ),
@@ -288,20 +270,6 @@ class _MostCartedList extends StatelessWidget {
 }
 
 // ─── Misc helpers ─────────────────────────────────────────────────────────────
-
-class _SeeAllButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'Lihat semua',
-      style: TextStyle(
-        fontSize: 12,
-        color: AppColors.primaryNormal,
-        fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-}
 
 class _EmptySection extends StatelessWidget {
   final String message;
