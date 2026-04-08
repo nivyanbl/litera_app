@@ -12,6 +12,7 @@ class AdminDashboardController extends GetxController {
   final Rx<DashboardModel?> dashboardData = Rx<DashboardModel?>(null);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
+  final RxInt bottomNavIndex = 0.obs;
 
   // ─── Derived chart data ──────────────────────────────────────────────────────
   final RxList<FlSpot> chartSpots = <FlSpot>[].obs;
@@ -20,7 +21,7 @@ class AdminDashboardController extends GetxController {
 
   // ─── Constructor ─────────────────────────────────────────────────────────────
   AdminDashboardController({required AdminDashboardRepository repository})
-      : _repository = repository;
+    : _repository = repository;
 
   // ─── Lifecycle ───────────────────────────────────────────────────────────────
   @override
@@ -34,6 +35,25 @@ class AdminDashboardController extends GetxController {
     if (selectedDays.value == days) return;
     selectedDays.value = days;
     fetchDashboardData();
+  }
+
+  void selectBottomNav(int index) {
+    bottomNavIndex.value = index;
+    // Handle navigation based on index
+    switch (index) {
+      case 0:
+        // Dashboard - already on this page
+        break;
+      case 1:
+        Get.toNamed('/admin/orders');
+        break;
+      case 2:
+        Get.toNamed('/admin/products');
+        break;
+      case 3:
+        Get.toNamed('/admin/profile');
+        break;
+    }
   }
 
   Future<void> fetchDashboardData() async {

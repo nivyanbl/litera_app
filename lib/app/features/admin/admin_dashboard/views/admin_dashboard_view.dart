@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
+import 'package:litera/app/core/widgets/admin_bottom_nav_bar.dart';
 import 'package:litera/app/features/admin/admin_dashboard/widgets/dashboard_header_widget.dart';
+import 'package:litera/app/features/admin/admin_dashboard/widgets/product_card_widget.dart';
 import '../controllers/admin_dashboard_controller.dart';
 import '../widgets/period_filter_widget.dart';
 import '../widgets/revenue_card_widget.dart';
 import '../widgets/section_title_widget.dart';
-import '../widgets/product_card_widget.dart';
 
 class AdminDashboardView extends StatelessWidget {
   const AdminDashboardView({super.key});
@@ -129,6 +130,7 @@ class AdminDashboardView extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: const AdminBottomNavBar(),
     );
   }
 }

@@ -29,7 +29,7 @@ class ProductCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -112,7 +112,7 @@ class _ProductThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 44,
-      height: 44,
+      height: 54,
       decoration: BoxDecoration(
         color: AppColors.primaryLight,
         borderRadius: BorderRadius.circular(10),
@@ -122,8 +122,8 @@ class _ProductThumbnail extends StatelessWidget {
           ? Image.network(
               imageUrl,
               fit: BoxFit.cover,
-              cacheHeight: 44,
-              cacheWidth: 44,
+              // cacheHeight: 100,
+              // cacheWidth: 100,
               errorBuilder: (_, __, ___) => _PlaceholderIcon(),
             )
           : _PlaceholderIcon(),
