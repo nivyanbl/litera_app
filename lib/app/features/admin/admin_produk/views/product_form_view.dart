@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:litera/app/core/theme/app_colors.dart';
+import 'package:litera/app/core/widgets/custom_app_bar.dart';
+import 'package:litera/app/core/widgets/custom_text_field.dart';
 import 'package:litera/app/data/models/category_model.dart';
 import 'package:litera/app/data/models/product_model.dart';
 import '../controllers/admin_produk_controller.dart';
@@ -54,10 +57,10 @@ class _ProductFormViewState extends State<ProductFormView> {
     authorCtrl = TextEditingController(text: p?.author ?? '');
     langCtrl = TextEditingController(text: p?.language ?? '');
     pagesCtrl = TextEditingController(text: p?.pages ?? '');
-    
+
     // Convert published date from backend format (yyyy-MM-dd) to display format (dd MMM yyyy)
     publishedAtCtrl = TextEditingController(
-      text: p?.publishedAt != null 
+      text: p?.publishedAt != null
           ? _convertBackendDateToDisplayFormat(p!.publishedAt)
           : '',
     );
@@ -198,11 +201,15 @@ class _ProductFormViewState extends State<ProductFormView> {
     // Parse display format (dd MMM yyyy) back to DateTime for picker
     if (publishedAtCtrl.text.trim().isNotEmpty) {
       try {
-        final displayDate = DateFormat('dd MMM yyyy', 'id_ID').parse(publishedAtCtrl.text.trim());
+        final displayDate = DateFormat(
+          'dd MMM yyyy',
+          'id_ID',
+        ).parse(publishedAtCtrl.text.trim());
         initialDate = displayDate;
       } catch (e) {
         // Fallback to trying yyyy-MM-dd format for existing data
-        initialDate = DateTime.tryParse(publishedAtCtrl.text.trim()) ?? DateTime.now();
+        initialDate =
+            DateTime.tryParse(publishedAtCtrl.text.trim()) ?? DateTime.now();
       }
     }
 
@@ -294,19 +301,17 @@ class _ProductFormViewState extends State<ProductFormView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F8FC),
-      appBar: AppBar(
-        title: Text(isEdit ? 'Edit Product' : 'Add Product'),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: AppColors.grayLight,
+      appBar: CustomAppBar(
+        title: isEdit ? 'Edit Product' : 'Add Product',
+        showLeftIcon: true,
+        showRightIcon: false,
       ),
       body: Obx(
         () => Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             children: [
               _buildSectionCard(
                 title: 'Basic Information',
@@ -334,11 +339,12 @@ class _ProductFormViewState extends State<ProductFormView> {
                     'Description',
                     descCtrl,
                     maxLines: 4,
+                    minLines: 4,
                     required: false,
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               _buildSectionCard(
                 title: 'Book Details',
                 icon: Icons.menu_book_outlined,
@@ -356,44 +362,51 @@ class _ProductFormViewState extends State<ProductFormView> {
                   _buildDateField(),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               _buildSectionCard(
                 title: 'Files',
                 icon: Icons.attach_file_outlined,
                 children: [
                   _buildImagePickerCard(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   _buildPdfPickerCard(),
                 ],
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: controller.isLoading.value ? null : _submit,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4A90E2),
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(54),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              const SizedBox(height: 28),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: controller.isLoading.value ? null : _submit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryNormal,
+                    disabledBackgroundColor: AppColors.grayLightHover,
+                    disabledForegroundColor: AppColors.grayLightActive,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size.fromHeight(48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 0,
                   ),
+                  child: controller.isLoading.value
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation(Colors.white),
+                          ),
+                        )
+                      : Text(
+                          isEdit ? 'Save Changes' : 'Create Product',
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
-                child: controller.isLoading.value
-                    ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.4,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Text(
-                        isEdit ? 'Save Changes' : 'Create Product',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -407,38 +420,39 @@ class _ProductFormViewState extends State<ProductFormView> {
     required List<Widget> children,
   }) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                height: 42,
-                width: 42,
+                height: 40,
+                width: 40,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4A90E2).withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Icon(icon, color: const Color(0xFF4A90E2)),
+                child: Icon(icon, color: AppColors.primaryNormal, size: 22),
               ),
               const SizedBox(width: 12),
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1A1A2E),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.grayDarker,
                 ),
               ),
             ],
@@ -451,18 +465,15 @@ class _ProductFormViewState extends State<ProductFormView> {
   }
 
   Widget _buildCategoryDropdown() {
-    // Get list of valid category ids
     final validIds = controller.categories.map((cat) => cat.id).toSet();
-
-    // Only use selectedCategoryId if it exists in the valid list
     final validValue =
         selectedCategoryId != null && validIds.contains(selectedCategoryId)
         ? selectedCategoryId
         : null;
 
-    return DropdownButtonFormField<int>(
-      initialValue: validValue,
-      decoration: _inputDecoration('Category'),
+    return CustomDropdownField<int>(
+      hintText: 'Category',
+      value: validValue,
       items: controller.categories.map((CategoryModel category) {
         return DropdownMenuItem<int>(
           value: category.id,
@@ -478,13 +489,16 @@ class _ProductFormViewState extends State<ProductFormView> {
         if (value == null || value == 0) return 'Category is required';
         return null;
       },
+      isRequired: true,
     );
   }
 
   Widget _buildPriceField() {
-    return TextFormField(
+    return CustomTextField(
+      hintText: 'Price',
       controller: priceCtrl,
       keyboardType: TextInputType.number,
+      prefixText: 'Rp ',
       onChanged: _formatPriceInput,
       validator: (val) {
         if (val == null || val.trim().isEmpty) {
@@ -495,7 +509,7 @@ class _ProductFormViewState extends State<ProductFormView> {
         }
         return null;
       },
-      decoration: _inputDecoration('Price').copyWith(prefixText: 'Rp '),
+      isRequired: true,
     );
   }
 
@@ -527,10 +541,10 @@ class _ProductFormViewState extends State<ProductFormView> {
     Widget preview;
     if (hasLocalImage) {
       preview = ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Image.file(
           selectedImageFile!,
-          height: 160,
+          height: 180,
           width: double.infinity,
           fit: BoxFit.cover,
         ),
@@ -539,29 +553,53 @@ class _ProductFormViewState extends State<ProductFormView> {
         (widget.product!.image!.startsWith('http://') ||
             widget.product!.image!.startsWith('https://'))) {
       preview = ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Image.network(
           widget.product!.image!,
-          height: 160,
+          height: 180,
           width: double.infinity,
           fit: BoxFit.cover,
         ),
       );
     } else {
       preview = Container(
-        height: 140,
+        height: 180,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: const Color(0xFFF4F7FB),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE3E8F0)),
+          color: AppColors.grayLight,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.grayLightActive, width: 0.8),
         ),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.image_outlined, size: 40, color: Color(0xFF4A90E2)),
-            SizedBox(height: 8),
-            Text('No image selected'),
+            Container(
+              height: 48,
+              width: 48,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.image_outlined,
+                color: AppColors.primaryNormal,
+                size: 24,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'No cover image selected',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.grayDarker,
+              ),
+            ),
+            const SizedBox(height: 2),
+            const Text(
+              'JPG, PNG • Max 2 MB',
+              style: TextStyle(fontSize: 11, color: AppColors.grayNormal),
+            ),
           ],
         ),
       );
@@ -571,11 +609,29 @@ class _ProductFormViewState extends State<ProductFormView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         preview,
-        const SizedBox(height: 10),
-        OutlinedButton.icon(
-          onPressed: _pickImage,
-          icon: const Icon(Icons.photo_library_outlined),
-          label: Text(hasLocalImage ? 'Change Image' : 'Pick Image'),
+        const SizedBox(height: 12),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            onPressed: _pickImage,
+            icon: Icon(
+              hasLocalImage ? Icons.loop : Icons.add_a_photo_outlined,
+              size: 18,
+            ),
+            label: Text(
+              hasLocalImage ? 'Change Cover Image' : 'Upload Cover Image',
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryNormal,
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -600,71 +656,109 @@ class _ProductFormViewState extends State<ProductFormView> {
       children: [
         Row(
           children: [
-            Text(
-              'PDF File',
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            const Text(
+              'Book Content (PDF)',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.grayDarker,
+              ),
             ),
             if (isNewProduct)
               const Text(
                 ' *',
                 style: TextStyle(
-                  color: Colors.red,
+                  color: AppColors.errorNormal,
                   fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
               ),
           ],
         ),
         const SizedBox(height: 10),
         Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFFF9FBFE),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isNewProduct && !isPdfSelected
-                  ? Colors.red.withValues(alpha: 0.5)
-                  : const Color(0xFFE3E8F0),
-            ),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.grayLightActive, width: 0.8),
           ),
           child: Row(
             children: [
-              const Icon(
-                Icons.picture_as_pdf_outlined,
-                color: Colors.redAccent,
+              Container(
+                height: 42,
+                width: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFBEAEA),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.picture_as_pdf_outlined,
+                  color: AppColors.errorNormal,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       pdfName ?? 'No PDF selected',
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: isNewProduct && !isPdfSelected
-                            ? Colors.red
-                            : null,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.grayDarker,
                       ),
                     ),
                     if (pdfSizeMB != null)
-                      Text(
-                        '${pdfSizeMB.toStringAsFixed(2)} MB',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: pdfSizeMB > 10
-                              ? Colors.orange
-                              : Colors.grey[600],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Text(
+                          '${pdfSizeMB.toStringAsFixed(2)} MB',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.grayNormal,
+                          ),
+                        ),
+                      ),
+                    if (!isPdfSelected)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 3),
+                        child: Text(
+                          'Upload a PDF file',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.grayNormal,
+                          ),
                         ),
                       ),
                   ],
                 ),
               ),
-              const SizedBox(width: 10),
-              OutlinedButton(
+              const SizedBox(width: 8),
+              TextButton(
                 onPressed: _pickPdf,
-                child: const Text('Choose PDF'),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  isPdfSelected ? 'Replace' : 'Upload',
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryNormal,
+                  ),
+                ),
               ),
             ],
           ),
@@ -672,17 +766,47 @@ class _ProductFormViewState extends State<ProductFormView> {
         if (isNewProduct && !isPdfSelected)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              'PDF is required for new products',
-              style: TextStyle(color: Colors.red[600], fontSize: 12),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 14,
+                  color: AppColors.errorNormal,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'PDF is required for new products',
+                  style: const TextStyle(
+                    color: AppColors.errorNormal,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         if (pdfSizeMB != null && pdfSizeMB > 10)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              '⚠ File is ${pdfSizeMB.toStringAsFixed(2)} MB. Recommended max 10 MB.',
-              style: TextStyle(color: Colors.orange[600], fontSize: 12),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.warning_outlined,
+                  size: 14,
+                  color: AppColors.warningNormal,
+                ),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    'File is ${pdfSizeMB.toStringAsFixed(2)} MB (max 10 MB recommended)',
+                    style: const TextStyle(
+                      color: AppColors.warningNormal,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
       ],
@@ -694,22 +818,18 @@ class _ProductFormViewState extends State<ProductFormView> {
     TextEditingController ctrl, {
     bool isNumber = false,
     int maxLines = 1,
+    int minLines = 1,
     bool required = true,
   }) {
-    return TextFormField(
+    return CustomTextField(
+      hintText: label,
       controller: ctrl,
       keyboardType: isNumber
           ? const TextInputType.numberWithOptions(decimal: false)
           : TextInputType.text,
       maxLines: maxLines,
-      validator: (val) {
-        if (!required) return null;
-        if (val == null || val.trim().isEmpty) {
-          return 'Required';
-        }
-        return null;
-      },
-      decoration: _inputDecoration(label),
+      minLines: minLines,
+      isRequired: required,
     );
   }
 
@@ -717,20 +837,24 @@ class _ProductFormViewState extends State<ProductFormView> {
     return InputDecoration(
       labelText: label,
       filled: true,
-      fillColor: const Color(0xFFF7F9FC),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFE3E8F0)),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.grayLightActive),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFFE3E8F0)),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: AppColors.grayLightActive),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: Color(0xFF4A90E2), width: 1.4),
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: AppColors.primaryNormal,
+          width: 1.2,
+        ),
       ),
+      labelStyle: const TextStyle(color: AppColors.grayNormal, fontSize: 13),
     );
   }
 }
