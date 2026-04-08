@@ -12,7 +12,7 @@ class CategorySection extends StatelessWidget {
 
   final CategoryController controller = Get.put(
     CategoryController(
-      CategoryRepository(CategoryProvider(Get.find<ApiClient>())),
+      CategoryRepository(categoryProvider: CategoryProvider(Get.find<ApiClient>())),
     ),
   );
 

@@ -39,18 +39,6 @@ class AdminBottomNavBar extends StatelessWidget {
                   isActive: controller.bottomNavIndex.value == 1,
                   onTap: () => controller.selectBottomNav(1),
                 ),
-                _buildNavItem(
-                  icon: Icons.inventory_2_rounded,
-                  label: 'Products',
-                  isActive: controller.bottomNavIndex.value == 2,
-                  onTap: () => controller.selectBottomNav(2),
-                ),
-                _buildNavItem(
-                  icon: Icons.person_rounded,
-                  label: 'Profile',
-                  isActive: controller.bottomNavIndex.value == 3,
-                  onTap: () => controller.selectBottomNav(3),
-                ),
               ],
             ),
           ),

@@ -19,14 +19,22 @@ class CartModel {
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
-      id: json['id'],
-      userId: json['user_id'] ?? 0,
-      productId: json['product_id'],
-      quantity: json['quantity'] ?? 1,
+      id: _parseInt(json['id']),
+      userId: _parseInt(json['user_id']),
+      productId: _parseInt(json['product_id']),
+      quantity: _parseInt(json['quantity']),
       product: json['product'] != null
           ? ProductModel.fromJson(json['product'])
           : null,
     );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is num) return value.toInt();
+    return 0;
   }
 
   Map<String, dynamic> toJson() {

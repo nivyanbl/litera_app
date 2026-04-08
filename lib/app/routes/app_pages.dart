@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:litera/app/features/admin/admin_produk/views/product_list_view.dart';
 
 import '../features/admin/admin_dashboard/bindings/admin_dashboard_binding.dart';
 import '../features/admin/admin_dashboard/views/admin_dashboard_view.dart';
@@ -10,8 +11,6 @@ import '../features/customer/checkout/bindings/checkout_binding.dart';
 import '../features/customer/checkout/views/checkout_view.dart';
 import '../features/customer/home/bindings/home_binding.dart';
 import '../features/customer/home/views/home_view.dart';
-import '../features/login/bindings/login_binding.dart';
-import '../features/login/views/login_view.dart';
 import '../features/customer/order_history/bindings/order_history_binding.dart';
 import '../features/customer/order_history/views/order_history_view.dart';
 import '../features/customer/product_detail/bindings/product_detail_binding.dart';
@@ -19,8 +18,11 @@ import '../features/customer/product_detail/views/product_detail_view.dart';
 import '../features/customer/profile/bindings/profile_binding.dart';
 import '../features/customer/profile/views/edit_profile_view.dart';
 import '../features/customer/profile/views/profile_view.dart';
+import '../features/login/bindings/login_binding.dart';
+import '../features/login/views/login_view.dart';
 import '../features/register/bindings/register_binding.dart';
 import '../features/register/views/register_view.dart';
+import '../features/admin/admin_produk/bindings/admin_produk_binding.dart';
 
 part 'app_routes.dart';
 
@@ -80,6 +82,11 @@ class AppPages {
       name: _Paths.ADMIN_DASHBOARD,
       page: () => const AdminDashboardView(),
       binding: AdminDashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_PRODUK,
+      page: () => const ProductListView(),
+      binding: AdminProdukBinding(),
     ),
   ];
 }

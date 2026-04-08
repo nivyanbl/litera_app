@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:litera/app/data/models/admin_dashboard_model.dart';
 import 'package:litera/app/data/repositories/admin_dashboard_repository.dart';
 
@@ -15,7 +14,6 @@ class AdminDashboardController extends GetxController {
   final RxInt bottomNavIndex = 0.obs;
 
   // ─── Derived chart data ──────────────────────────────────────────────────────
-  final RxList<FlSpot> chartSpots = <FlSpot>[].obs;
   final RxList<String> chartLabels = <String>[].obs;
   final RxDouble chartMaxY = 100000.0.obs;
 
@@ -42,16 +40,12 @@ class AdminDashboardController extends GetxController {
     // Handle navigation based on index
     switch (index) {
       case 0:
-        // Dashboard - already on this page
+        // Dashboard - stay on this page
+        Get.offNamed('/admin-dashboard');
         break;
       case 1:
-        Get.toNamed('/admin/orders');
-        break;
-      case 2:
-        Get.toNamed('/admin/products');
-        break;
-      case 3:
-        Get.toNamed('/admin/profile');
+        // Orders - navigate to Product List
+        Get.toNamed('/admin-produk');
         break;
     }
   }
@@ -67,7 +61,6 @@ class AdminDashboardController extends GetxController {
     } catch (e) {
       errorMessage.value = e.toString().replaceAll('Exception: ', '');
       dashboardData.value = null;
-      chartSpots.clear();
       chartLabels.clear();
     } finally {
       isLoading.value = false;
@@ -77,24 +70,20 @@ class AdminDashboardController extends GetxController {
   // ─── Helpers ─────────────────────────────────────────────────────────────────
   void _buildChartData(List<ChartDataModel> data) {
     if (data.isEmpty) {
-      chartSpots.clear();
       chartLabels.clear();
       chartMaxY.value = 100000;
       return;
     }
 
-    final spots = <FlSpot>[];
     final labels = <String>[];
     double maxRevenue = 0;
 
     for (int i = 0; i < data.length; i++) {
       final revenue = data[i].revenue;
-      spots.add(FlSpot(i.toDouble(), revenue));
       labels.add(data[i].label);
       if (revenue > maxRevenue) maxRevenue = revenue;
     }
 
-    chartSpots.value = spots;
     chartLabels.value = labels;
 
     // Add 20% headroom above the tallest bar dynamically from backend data

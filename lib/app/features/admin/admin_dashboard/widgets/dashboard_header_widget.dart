@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:litera/app/core/storage/secure_storage.dart';
 import 'package:litera/app/core/theme/app_colors.dart';
 
 class DashboardHeader extends StatelessWidget {
@@ -52,7 +54,7 @@ class DashboardHeader extends StatelessWidget {
           ),
         ),
 
-        // Notification bell
+        // Logout button
         Container(
           width: 40,
           height: 40,
@@ -61,16 +63,46 @@ class DashboardHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withValues(alpha: 0.06),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
             ],
           ),
-          child: Icon(
-            Icons.notifications_none_rounded,
-            color: AppColors.primaryNormal,
-            size: 20,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                Get.dialog(
+                  AlertDialog(
+                    title: const Text('Logout'),
+                    content: const Text('Apakah Anda yakin ingin keluar?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Get.back(),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await SecureStorage.clear();
+                          Get.offAllNamed('/login');
+                        },
+                        child: const Text(
+                          'Logout',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              borderRadius: BorderRadius.circular(12),
+              child: Icon(
+                Icons.logout_rounded,
+                color: AppColors.primaryNormal,
+                size: 20,
+              ),
+            ),
           ),
         ),
       ],

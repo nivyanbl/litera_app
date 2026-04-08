@@ -38,7 +38,7 @@ class ProfileProvider {
       );
     }
 
-    final response = await apiClient.put('/profile', data: formData);
+    final response = await apiClient.post('/profile', data: formData);
 
     if (response.data == null) throw Exception('Gagal mengupdate profil');
     final responseData = response.data['data'] ?? response.data;

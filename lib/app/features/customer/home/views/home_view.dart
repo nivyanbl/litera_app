@@ -10,7 +10,7 @@ import '../widgets/category_section.dart';
 import '../widgets/product_card.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {

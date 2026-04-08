@@ -35,10 +35,10 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'] ?? 0,
-      categoryId: json['category_id'] ?? 0,
-      category: json['category'] != null 
-          ? CategoryModel.fromJson(json['category']) 
+      id: _parseInt(json['id']),
+      categoryId: _parseInt(json['category_id']),
+      category: json['category'] != null
+          ? CategoryModel.fromJson(json['category'])
           : null,
       title: json['title'] ?? '',
       slug: json['slug'] ?? '',
@@ -47,13 +47,21 @@ class ProductModel {
           : double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
       description: json['description'],
       fileBook: json['file_book'],
-      stock: json['stock'] ?? 0,
+      stock: _parseInt(json['stock']),
       image: json['image'],
       author: json['author'] ?? '',
       language: json['language'] ?? '',
       pages: json['pages'] ?? '',
       publishedAt: json['published_at'] ?? '',
     );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is num) return value.toInt();
+    return 0;
   }
 
   Map<String, dynamic> toJson() {

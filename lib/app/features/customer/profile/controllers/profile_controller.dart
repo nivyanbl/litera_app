@@ -32,10 +32,10 @@ class ProfileController extends GetxController {
       final userData = await repository.fetchProfile();
       user.value = userData;
 
-      nameController.text = userData.name ?? '';
-      emailController.text = userData.email ?? '';
-      phoneController.text = userData.phoneNumber ?? '';
-      birthDateController.text = userData.birthDate ?? '';
+      nameController.text = userData.name;
+      emailController.text = userData.email;
+      phoneController.text = userData.phoneNumber;
+      birthDateController.text = userData.birthDate;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {

@@ -127,14 +127,22 @@ class OrderDetailModel {
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) {
     return OrderDetailModel(
-      id: json['id'],
-      productId: json['product_id'],
-      quantity: json['quantity'],
-      price: json['price'],
+      id: _parseInt(json['id']),
+      productId: _parseInt(json['product_id']),
+      quantity: _parseInt(json['quantity']),
+      price: json['price']?.toString(),
       product: json['product'] != null
           ? OrderProductModel.fromJson(json['product'])
           : null,
     );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is num) return value.toInt();
+    return 0;
   }
 }
 
@@ -148,10 +156,18 @@ class OrderProductModel {
 
   factory OrderProductModel.fromJson(Map<String, dynamic> json) {
     return OrderProductModel(
-      id: json['id'],
-      title: json['title'],
-      image: json['image'],
-      author: json['author'],
+      id: _parseInt(json['id']),
+      title: json['title']?.toString(),
+      image: json['image']?.toString(),
+      author: json['author']?.toString(),
     );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is num) return value.toInt();
+    return 0;
   }
 }
