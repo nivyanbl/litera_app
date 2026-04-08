@@ -10,7 +10,7 @@ class AppIcon extends StatelessWidget {
   final double borderWidth;
 
   const AppIcon({
-    Key? key,
+    super.key,
     required this.icon,
     this.backgroundColor = Colors.white,
     this.iconColor =  Colors.black,
@@ -18,7 +18,7 @@ class AppIcon extends StatelessWidget {
     this.iconSize = 18,
     this.borderColor = Colors.grey,
     this.borderWidth = 1.5,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

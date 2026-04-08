@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../core/network/api_client.dart';
 import '../models/product_model.dart';
 
@@ -6,38 +8,53 @@ class ProductProvider {
 
   ProductProvider(this.apiClient);
 
-  // Ambil daftar produk dengan opsi pencarian dan kategori
-  Future<List<ProductModel>> getProducts({String? search, int? categoryId}) async {
+  Future<List<ProductModel>> getProducts({
+    String? search,
+    int? categoryId,
+    String? sort,
+    bool? onlyAvailable,
+  }) async {
     final response = await apiClient.get(
       '/products',
       queryParameters: {
         if (search != null && search.isNotEmpty) 'search': search,
         if (categoryId != null) 'category_id': categoryId,
+        if (sort != null && sort.isNotEmpty) 'sort': sort,
+        if (onlyAvailable == true) 'only_available': 1,
       },
     );
 
-    if (response.data['data'] != null) {
-      return (response.data['data'] as List)
-          .map((e) => ProductModel.fromJson(e))
-          .toList();
-    }
-    return [];
+    final List<dynamic> data = response.data['data'] ?? [];
+    return data
+        .map<ProductModel>(
+          (e) => ProductModel.fromJson(e as Map<String, dynamic>),
+        )
+        .toList();
   }
 
-  // Ambil detail produk berdasarkan ID atau slug
   Future<ProductModel> getProductDetail(String idOrSlug) async {
     final response = await apiClient.get('/products/$idOrSlug');
-    
     return ProductModel.fromJson(response.data['data']);
   }
 
-  // Cek kepemilikan produk
+  Future<Response<dynamic>> createProduct(FormData data) {
+    return apiClient.post('/products', data: data);
+  }
+
+  Future<Response<dynamic>> updateProduct(int id, FormData data) {
+    return apiClient.post('/products/$id', data: data);
+  }
+
+  Future<Response<dynamic>> deleteProduct(int id) {
+    return apiClient.delete('/products/$id');
+  }
+
   Future<bool> checkOwnership(int productId) async {
     try {
       final response = await apiClient.get('/products/$productId/ownership');
-      return response.data['is_owned'] ?? false; 
-    } catch (e) {
+      return response.data['is_owned'] ?? false;
+    } catch (_) {
       return false;
     }
-}
+  }
 }

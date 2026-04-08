@@ -13,19 +13,22 @@ class CategoryModel {
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
-      id: json['id'] ?? 0,
+      id: _parseInt(json['id']),
       name: json['name'] ?? '',
       slug: json['slug'] ?? '',
-      parentId: json['parent_id'],
+      parentId: _parseInt(json['parent_id']),
     );
   }
 
+  static int _parseInt(dynamic value) {
+    if (value == null) return 0;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    if (value is num) return value.toInt();
+    return 0;
+  }
+
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'slug': slug,
-      'parent_id': parentId,
-    };
+    return {'id': id, 'name': name, 'slug': slug, 'parent_id': parentId};
   }
 }

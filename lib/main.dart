@@ -12,7 +12,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
   await GetStorage.init();
-  await dotenv.load(fileName: ".env.dev");
+  await dotenv.load(fileName: ".env");
+
+  imageCache.maximumSizeBytes =
+      50 * 1024 * 1024; 
+  imageCache.maximumSize = 100; 
 
   // Inisialisasi services global
   Get.put(ApiClient(), permanent: true);

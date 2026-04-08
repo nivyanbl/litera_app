@@ -51,31 +51,74 @@ class ApiClient {
 
           // Handle HTTP errors
           if (error.response != null) {
-            final statusCode = error.response!.statusCode;
+            final statusCode = error.response!.statusCode ?? 0;
             String errorMessage = 'Terjadi kesalahan';
 
-            switch (statusCode) {
-              case 400:
-                errorMessage =
-                    error.response!.data['message'] ?? 'Permintaan tidak valid';
-                break;
-              case 401:
-                errorMessage =
-                    'Sesi Anda telah berakhir. Silakan login kembali.';
-                await SecureStorage.clear();
-                break;
-              case 403:
-                errorMessage = 'Anda tidak memiliki akses';
-                break;
-              case 404:
-                errorMessage = 'Data tidak ditemukan';
-                break;
-              case 500:
-                errorMessage = 'Terjadi kesalahan pada server';
-                break;
-              default:
-                errorMessage =
-                    error.response!.data['message'] ?? 'Terjadi kesalahan';
+            try {
+              final responseData = error.response!.data;
+              String? serverMessage;
+
+              if (responseData is Map) {
+                // Handle Laravel validation error format: {"errors": {"field": ["message"]}}
+                if (responseData['errors'] is Map) {
+                  final errorMap = responseData['errors'] as Map;
+                  final fieldErrors = errorMap.entries
+                      .map((e) {
+                        if (e.value is List) {
+                          return '${e.key}: ${(e.value as List).join(", ")}';
+                        }
+                        return '${e.key}: ${e.value}';
+                      })
+                      .join('\n');
+                  serverMessage = fieldErrors;
+                } else {
+                  // Try different possible error field names
+                  serverMessage =
+                      responseData['message'] as String? ??
+                      responseData['msg'] as String? ??
+                      responseData['error'] as String? ??
+                      (responseData['errors'] is List
+                          ? (responseData['errors'] as List).join(', ')
+                          : null) ??
+                      responseData['detail'] as String?;
+                }
+              } else if (responseData is String) {
+                serverMessage = responseData;
+              }
+
+              switch (statusCode) {
+                case 400:
+                  errorMessage = serverMessage ?? 'Permintaan tidak valid';
+                  break;
+                case 401:
+                  errorMessage =
+                      'Sesi Anda telah berakhir. Silakan login kembali.';
+                  await SecureStorage.clear();
+                  break;
+                case 403:
+                  errorMessage = 'Anda tidak memiliki akses';
+                  break;
+                case 404:
+                  errorMessage = 'Data tidak ditemukan';
+                  break;
+                case 413:
+                  errorMessage =
+                      'File terlalu besar. Silakan gunakan file yang lebih kecil (PDF max 10 MB, Image max 2 MB)';
+                  break;
+                case 422:
+                  // Validation error from Laravel
+                  errorMessage = serverMessage ?? 'Data tidak valid';
+                  break;
+                case 500:
+                  errorMessage =
+                      serverMessage ?? 'Terjadi kesalahan pada server';
+                  break;
+                default:
+                  errorMessage =
+                      serverMessage ?? 'Terjadi kesalahan (HTTP $statusCode)';
+              }
+            } catch (e) {
+              errorMessage = 'Terjadi kesalahan: $e';
             }
 
             return handler.reject(
@@ -153,6 +196,4 @@ class ApiClient {
       throw Exception('Terjadi kesalahan: $e');
     }
   }
-
 }
-
