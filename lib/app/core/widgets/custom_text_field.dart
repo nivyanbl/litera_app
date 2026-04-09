@@ -78,11 +78,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE3E8F0)),
+          borderSide: BorderSide(color:Colors.grey.shade500 ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.grayDarker),
+          borderSide: BorderSide(color: Colors.grey.shade500  ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
