@@ -1,132 +1,137 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart' as picker;
 import '../../../../data/models/user_model.dart';
 import '../../../../data/repositories/profile_repository.dart';
 
 class ProfileController extends GetxController {
   final ProfileRepository repository;
-  ProfileController({required this.repository}); // Dependency Injection
 
-  var isLoading = false.obs;
-  var user = Rxn<UserModel>();
-  var title = 'Profil Saya'.obs;
+  ProfileController({required this.repository});
 
-  // Text Controllers
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final phoneController = TextEditingController();
-  final birthDateController = TextEditingController();
+  // ── State ──────────────────────────────────────────────
+  final Rx<UserModel?> user = Rx<UserModel?>(null);
+  final RxBool isLoading = false.obs;
+  final RxBool isUpdating = false.obs;
+  final RxString errorMessage = ''.obs;
 
-  var selectedImagePath = ''.obs;
+  // ── Edit-form controllers ──────────────────────────────
+  late final TextEditingController nameController;
+  late final TextEditingController phoneController;
+  late final TextEditingController birthDateController;
+  late final TextEditingController emailController;
 
+  // Image picker – hubungkan ke image_picker saat siap
+  final RxString selectedImagePath = ''.obs;
+
+  // ── Lifecycle ──────────────────────────────────────────
   @override
   void onInit() {
     super.onInit();
-    loadProfile();
-  }
-
-  Future<void> loadProfile() async {
-    try {
-      isLoading.value = true;
-      final userData = await repository.fetchProfile();
-      user.value = userData;
-
-      nameController.text = userData.name;
-      emailController.text = userData.email;
-      phoneController.text = userData.phoneNumber;
-      birthDateController.text = userData.birthDate;
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> pickImage() async {
-    final pickedFile = await picker.ImagePicker().pickImage(
-      source: picker.ImageSource.gallery,
-    );
-    if (pickedFile != null) {
-      selectedImagePath.value = pickedFile.path;
-    }
-  }
-
-  Future<void> saveProfile() async {
-    try {
-      isLoading.value = true;
-
-      // Validasi input
-      if (nameController.text.isEmpty) {
-        Get.snackbar('Error', 'Nama tidak boleh kosong');
-        isLoading.value = false;
-        return;
-      }
-
-      // Siapkan data - hanya kirim data yang tidak kosong
-      Map<String, dynamic> data = {'name': nameController.text};
-
-      // Tambah email jika tidak kosong
-      if (emailController.text.isNotEmpty) {
-        data['email'] = emailController.text;
-      }
-
-      // Tambah phone_number jika tidak kosong
-      if (phoneController.text.isNotEmpty) {
-        data['phone_number'] = phoneController.text;
-      }
-
-      // Tambah birth_date jika tidak kosong dan format valid (YYYY-MM-DD)
-      if (birthDateController.text.isNotEmpty) {
-        // Validasi format date
-        try {
-          DateTime.parse(birthDateController.text);
-          data['birth_date'] = birthDateController.text;
-        } catch (e) {
-          Get.snackbar(
-            'Error',
-            'Format tanggal tidak valid (gunakan YYYY-MM-DD)',
-          );
-          isLoading.value = false;
-          return;
-        }
-      }
-
-      // Panggil repository
-      bool isSuccess = await repository.updateProfile(
-        data,
-        selectedImagePath.value,
-      );
-
-      if (isSuccess) {
-        Get.snackbar('Berhasil', 'Profil kamu sudah diperbarui');
-        loadProfile(); // Refresh tampilan dengan data baru
-      } else {
-        Get.snackbar('Gagal', 'Terjadi kesalahan saat mengupdate profil');
-      }
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> logout() async {
-    try {
-      isLoading.value = true;
-      await repository.logout();
-      Get.offAllNamed('/login');
-    } catch (e) {
-      Get.snackbar('Error', 'Gagal logout: ${e.toString()}');
-    } finally {
-      isLoading.value = false;
-    }
+    nameController = TextEditingController();
+    phoneController = TextEditingController();
+    birthDateController = TextEditingController();
+    emailController = TextEditingController();
+    fetchProfile();
   }
 
   @override
   void onClose() {
     nameController.dispose();
-    emailController.dispose();
     phoneController.dispose();
     birthDateController.dispose();
+    emailController.dispose();
     super.onClose();
   }
+
+  // ── Methods ────────────────────────────────────────────
+
+  Future<void> fetchProfile() async {
+    isLoading.value = true;
+    errorMessage.value = '';
+    try {
+      final data = await repository.fetchProfile();
+      user.value = data;
+      _populateFormFields(data);
+    } catch (e) {
+      errorMessage.value = e.toString();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void _populateFormFields(UserModel data) {
+    nameController.text = data.name;
+    phoneController.text = data.phoneNumber;
+    birthDateController.text = data.birthDate;
+    emailController.text = data.email;
+  }
+
+  /// Dipanggil saat user tap "Simpan" di Edit Profile
+  Future<void> updateProfile() async {
+    if (isUpdating.value) return;
+    isUpdating.value = true;
+    try {
+      final payload = {
+        'name': nameController.text.trim(),
+        'phone_number': phoneController.text.trim(),
+        'birth_date': birthDateController.text.trim(),
+      };
+      final success = await repository.updateProfile(
+        payload,
+        selectedImagePath.value.isNotEmpty ? selectedImagePath.value : null,
+      );
+      if (success) {
+        await fetchProfile();
+        Get.back();
+        Get.snackbar(
+          'Berhasil',
+          'Profil berhasil diperbarui',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Gagal',
+        'Gagal memperbarui profil: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isUpdating.value = false;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await repository.logout();
+      // TODO: Sesuaikan route ke halaman login kamu
+      Get.offAllNamed('/login');
+    } catch (e) {
+      Get.snackbar(
+        'Gagal',
+        'Gagal logout: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  /// TODO: Sambungkan ke image_picker
+  Future<void> pickImage() async {
+    // Contoh integrasi image_picker:
+    // final picker = ImagePicker();
+    // final picked = await picker.pickImage(source: ImageSource.gallery);
+    // if (picked != null) selectedImagePath.value = picked.path;
+  }
+
+  // ── Helpers ────────────────────────────────────────────
+  String get displayName => user.value?.name ?? '';
+  String get displayEmail => user.value?.email ?? '';
+  String get displayPhone =>
+      (user.value?.phoneNumber.isNotEmpty ?? false)
+          ? user.value!.phoneNumber
+          : 'Belum Terisi';
+  String get displayBirthDate =>
+      (user.value?.birthDate.isNotEmpty ?? false)
+          ? user.value!.birthDate
+          : 'Belum Terisi';
+  String get displayProfilePicture => user.value?.profilePicture ?? '';
 }
