@@ -7,6 +7,7 @@ import 'package:litera/app/features/customer/profile/views/edit_profile_view.dar
 import 'package:litera/app/features/customer/profile/widgets/profile_info_tile.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../routes/app_pages.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -35,7 +36,7 @@ class ProfileView extends GetView<ProfileController> {
                     controller.user.value == null
                 ? _ErrorState(
                     message: controller.errorMessage.value,
-                    onRetry: () => controller.fetchProfile(showLoading: false),
+                    onRetry: () => Get.offAllNamed(Routes.login),
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,14 +46,18 @@ class ProfileView extends GetView<ProfileController> {
                       const SizedBox(height: 24),
 
                       // ── Info Pribadi ──────────────────────────────
-                      Text('Info Pribadi', style: AppTextStyles.bodyLarge),
+                      Text(
+                        'Info Pribadi',
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Card(
                         elevation: 0,
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
-                          side: const BorderSide(color: AppColors.grayLight),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -98,7 +103,7 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                           child: Text(
                             'Log Out',
-                            style: AppTextStyles.bodyMedium?.copyWith(
+                            style: AppTextStyles.bodyMedium.copyWith(
                               color: AppColors.errorNormal,
                             ),
                           ),
@@ -160,7 +165,7 @@ class _ProfileCard extends StatelessWidget {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: AppColors.grayLight),
+        side: const BorderSide(color: AppColors.grayLightActive),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -172,33 +177,31 @@ class _ProfileCard extends StatelessWidget {
 
             // Name & Email
             Expanded(
-              child: // E:/litera_app/lib/app/features/customer/profile/views/profile_view.dart
-                  // ... di dalam _ProfileCard ...
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        controller.displayName.isNotEmpty
-                            ? controller.displayName
-                            : 'Memuat...',
-                        style: AppTextStyles.titleSmall,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        // Gunakan getter displayEmail agar konsisten
-                        controller.displayEmail.isNotEmpty
-                            ? controller.displayEmail
-                            : '',
-                        style: AppTextStyles.bodySmall?.copyWith(
-                          color: AppColors.primaryNormal,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Profile Pengguna",
+                    style: AppTextStyles.titleMedium.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 2),
+                  Text(
+                    controller.displayEmail.isNotEmpty
+                        ? controller.displayEmail
+                        : '',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.grayDarker,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
 
             // Ubah Button
@@ -213,7 +216,7 @@ class _ProfileCard extends StatelessWidget {
               ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.black,
-                side: const BorderSide(color: AppColors.grayLight),
+                side: const BorderSide(color: AppColors.grayLightActive),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 6,
@@ -240,12 +243,12 @@ class _ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 30,
+      radius: 40,
       backgroundColor: AppColors.grayLight,
       backgroundImage: imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-      onBackgroundImageError: imageUrl.isNotEmpty ? (_, __) {} : null,
+      onBackgroundImageError: imageUrl.isNotEmpty ? (_, _) {} : null,
       child: imageUrl.isEmpty
-          ? const Icon(Icons.person, size: 30, color: AppColors.grayDark)
+          ? const Icon(Icons.person, size: 40, color: AppColors.grayDark)
           : null,
     );
   }

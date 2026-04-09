@@ -39,7 +39,7 @@ class EditProfileView extends GetView<ProfileController> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.grey.shade200,
+                          color: AppColors.grayLightActive,
                           width: 1,
                         ),
                       ),
@@ -49,7 +49,7 @@ class EditProfileView extends GetView<ProfileController> {
                           Obx(
                             () => CircleAvatar(
                               radius: 40,
-                              backgroundColor: AppColors.primaryNormal,
+                              backgroundColor: AppColors.grayLight,
                               backgroundImage:
                                   controller.selectedImagePath.value.isNotEmpty
                                   ? FileImage(
@@ -60,7 +60,7 @@ class EditProfileView extends GetView<ProfileController> {
                                   ? const Icon(
                                       Icons.person,
                                       size: 44,
-                                      color: Colors.white,
+                                      color: AppColors.grayDark,
                                     )
                                   : null,
                             ),
@@ -83,7 +83,7 @@ class EditProfileView extends GetView<ProfileController> {
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(6),
                                       border: Border.all(
-                                        color: Colors.grey.shade200,
+                                        color: AppColors.grayLightActive,
                                       ),
                                     ),
                                     child: Text(

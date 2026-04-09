@@ -38,7 +38,7 @@ class ProfileInfoTile extends StatelessWidget {
             ],
           ),
         ),
-        const Divider(height: 1, thickness: 1, color: AppColors.grayLight),
+        const Divider(height: 1, thickness: 1, color: AppColors.grayLightActive),
       ],
     );
   }
