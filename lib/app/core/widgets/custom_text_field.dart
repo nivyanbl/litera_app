@@ -14,6 +14,8 @@ class CustomTextField extends StatefulWidget {
   final bool isRequired;
   final Function(String)? onChanged;
   final String? prefixText;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   const CustomTextField({
     super.key,
@@ -29,6 +31,8 @@ class CustomTextField extends StatefulWidget {
     this.isRequired = false,
     this.onChanged,
     this.prefixText,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -48,6 +52,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
+      readOnly: widget.readOnly,
+      onTap: widget.onTap,
       obscureText: _isObscure,
       keyboardType: widget.keyboardType,
       maxLines: widget.isPassword ? 1 : widget.maxLines,

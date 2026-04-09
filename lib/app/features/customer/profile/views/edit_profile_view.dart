@@ -55,8 +55,11 @@ class EditProfileView extends GetView<ProfileController> {
                                   ? FileImage(
                                       File(controller.selectedImagePath.value),
                                     )
-                                  : null,
-                              child: controller.selectedImagePath.value.isEmpty
+                                  : controller.displayProfilePicture.isNotEmpty
+                                      ? NetworkImage(controller.displayProfilePicture)
+                                      : null,
+                              child: controller.selectedImagePath.value.isEmpty &&
+                                      controller.displayProfilePicture.isEmpty
                                   ? const Icon(
                                       Icons.person,
                                       size: 44,
@@ -145,7 +148,8 @@ class EditProfileView extends GetView<ProfileController> {
                           hintText: 'Tanggal Lahir',
                           icon: Icons.calendar_today_outlined,
                           controller: controller.birthDateController,
-                          keyboardType: TextInputType.datetime,
+                          readOnly: true,
+                          onTap: () => controller.pickDateOfBirth(),
                         ),
                         const SizedBox(height: 12),
                         CustomTextField(
@@ -175,11 +179,10 @@ class EditProfileView extends GetView<ProfileController> {
               height: 48,
               child: Obx(
                 () => ElevatedButton(
-                  onPressed: controller.isLoading.value
+                  onPressed: controller.isUpdating.value
                       ? null
                       : () async {
-                          // await controller.saveProfile();
-                          Get.back();
+                          await controller.updateProfile();
                         },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryNormal,
@@ -189,7 +192,7 @@ class EditProfileView extends GetView<ProfileController> {
                     ),
                     elevation: 0,
                   ),
-                  child: controller.isLoading.value
+                  child: controller.isUpdating.value
                       ? const SizedBox(
                           width: 20,
                           height: 20,

@@ -172,7 +172,9 @@ class _ProfileCard extends StatelessWidget {
         child: Row(
           children: [
             // Avatar
-            _ProfileAvatar(imageUrl: controller.displayProfilePicture),
+            Obx(
+              () => _ProfileAvatar(imageUrl: controller.displayProfilePicture),
+            ),
             const SizedBox(width: 12),
 
             // Name & Email
@@ -242,11 +244,15 @@ class _ProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.log('🖼️ Avatar - imageUrl: $imageUrl, isEmpty: ${imageUrl.isEmpty}');
+    
     return CircleAvatar(
       radius: 40,
       backgroundColor: AppColors.grayLight,
       backgroundImage: imageUrl.isNotEmpty ? NetworkImage(imageUrl) : null,
-      onBackgroundImageError: imageUrl.isNotEmpty ? (_, _) {} : null,
+      onBackgroundImageError: imageUrl.isNotEmpty ? (_, __) {
+        Get.log('❌ Error loading image: $imageUrl');
+      } : null,
       child: imageUrl.isEmpty
           ? const Icon(Icons.person, size: 40, color: AppColors.grayDark)
           : null,
