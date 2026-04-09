@@ -21,86 +21,92 @@ class ProfileView extends GetView<ProfileController> {
         showRightIcon: false,
       ),
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (controller.isLoading.value && controller.user.value == null) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (controller.errorMessage.value.isNotEmpty) {
-          return _ErrorState(
-            message: controller.errorMessage.value,
-            onRetry: controller.fetchProfile,
-          );
-        }
-
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ── Profile Card ──────────────────────────────
-              _ProfileCard(controller: controller),
-              const SizedBox(height: 24),
-
-              // ── Info Pribadi ──────────────────────────────
-              Text('Info Pribadi', style: AppTextStyles.bodyLarge),
-              const SizedBox(height: 8),
-              Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: AppColors.grayLight),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
+        return RefreshIndicator(
+          onRefresh: () => controller.fetchProfile(showLoading: false),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child:
+                controller.errorMessage.value.isNotEmpty &&
+                    controller.user.value == null
+                ? _ErrorState(
+                    message: controller.errorMessage.value,
+                    onRetry: () => controller.fetchProfile(showLoading: false),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // ProfileInfoTile(
-                      //   icon: Icons.person_outline,
-                      //   label: 'Nama',
-                      //   value: controller.nameController.text.isNotEmpty
-                      //       ? controller.nameController.text
-                      //       : 'Belum diisi',
-                      // ),
-                      ProfileInfoTile(
-                        icon: Icons.phone_outlined,
-                        label: 'Nomer Telepon',
-                        value: controller.displayPhone,
+                      // ── Profile Card ──────────────────────────────
+                      _ProfileCard(controller: controller),
+                      const SizedBox(height: 24),
+
+                      // ── Info Pribadi ──────────────────────────────
+                      Text('Info Pribadi', style: AppTextStyles.bodyLarge),
+                      const SizedBox(height: 8),
+                      Card(
+                        elevation: 0,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: AppColors.grayLight),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            children: [
+                              ProfileInfoTile(
+                                icon: Icons.person_outline,
+                                label: 'Nama',
+                                value: controller.displayName.isNotEmpty
+                                    ? controller.displayName
+                                    : 'Belum diisi',
+                              ),
+                              ProfileInfoTile(
+                                icon: Icons.phone_outlined,
+                                label: 'Nomer Telepon',
+                                value: controller.displayPhone,
+                              ),
+                              ProfileInfoTile(
+                                icon: Icons.calendar_today_outlined,
+                                label: 'Tanggal Lahir',
+                                value: controller.displayBirthDate,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      ProfileInfoTile(
-                        icon: Icons.calendar_today_outlined,
-                        label: 'Tanggal Lahir',
-                        value: controller.displayBirthDate,
+                      const SizedBox(height: 32),
+
+                      // ── Log Out ───────────────────────────────────
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () => _confirmLogout(context),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.errorNormal,
+                            side: const BorderSide(
+                              color: AppColors.errorNormal,
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            'Log Out',
+                            style: AppTextStyles.bodyMedium?.copyWith(
+                              color: AppColors.errorNormal,
+                            ),
+                          ),
+                        ),
                       ),
+                      const SizedBox(height: 24),
                     ],
                   ),
-                ),
-              ),
-              const SizedBox(height: 32),
-
-              // ── Log Out ───────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => _confirmLogout(context),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.errorNormal,
-                    side: const BorderSide(color: AppColors.errorNormal),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    'Log Out',
-                    style: AppTextStyles.bodyMedium?.copyWith(
-                      color: AppColors.errorNormal,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-            ],
           ),
         );
       }),
@@ -166,28 +172,33 @@ class _ProfileCard extends StatelessWidget {
 
             // Name & Email
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    controller.displayName.isNotEmpty
-                        ? controller.displayName
-                        : 'Profil Pengguna',
-                    style: AppTextStyles.titleSmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              child: // E:/litera_app/lib/app/features/customer/profile/views/profile_view.dart
+                  // ... di dalam _ProfileCard ...
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.displayName.isNotEmpty
+                            ? controller.displayName
+                            : 'Memuat...',
+                        style: AppTextStyles.titleSmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        // Gunakan getter displayEmail agar konsisten
+                        controller.displayEmail.isNotEmpty
+                            ? controller.displayEmail
+                            : '',
+                        style: AppTextStyles.bodySmall?.copyWith(
+                          color: AppColors.primaryNormal,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    controller.displayEmail,
-                    style: AppTextStyles.bodySmall?.copyWith(
-                      color: AppColors.primaryNormal,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
             ),
 
             // Ubah Button
@@ -196,7 +207,10 @@ class _ProfileCard extends StatelessWidget {
                 Get.to(() => const EditProfileView());
               },
               icon: const Icon(Icons.edit_outlined, size: 16),
-              label: const Text('Ubah', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+              label: const Text(
+                'Ubah',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.black,
                 side: const BorderSide(color: AppColors.grayLight),

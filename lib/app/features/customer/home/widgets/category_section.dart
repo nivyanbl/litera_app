@@ -12,7 +12,9 @@ class CategorySection extends StatelessWidget {
 
   final CategoryController controller = Get.put(
     CategoryController(
-      CategoryRepository(categoryProvider: CategoryProvider(Get.find<ApiClient>())),
+      CategoryRepository(
+        categoryProvider: CategoryProvider(Get.find<ApiClient>()),
+      ),
     ),
   );
 
@@ -79,32 +81,34 @@ class CategorySection extends StatelessWidget {
     );
   }
 
-Widget _categoryChip(String label, {bool isActive = false}) {
-  return Container(
-    width: 100,
-    height: 40,
-    margin: const EdgeInsets.only(right: 12),
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    decoration: ShapeDecoration(
-      color: isActive ? AppColors.primaryNormal.withValues(alpha: 0.1) : Colors.white, 
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-          color: isActive ? AppColors.primaryNormal : const Color(0xFFC8C8CC), 
-        ),
-        borderRadius: BorderRadius.circular(15),
-      ),
-    ),
-    child: Center(
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isActive ? AppColors.primaryNormal : Colors.black,
-          fontSize: 14,
-          fontFamily: 'Poppins',
-          fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-          height: 1.0,
+  Widget _categoryChip(String label, {bool isActive = false}) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 40),
+      margin: const EdgeInsets.only(right: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: ShapeDecoration(
+        color: isActive
+            ? AppColors.primaryNormal.withValues(alpha: 0.1)
+            : Colors.white,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: isActive ? AppColors.primaryNormal : const Color(0xFFC8C8CC),
+          ),
+          borderRadius: BorderRadius.circular(15),
         ),
       ),
-    ),
-  );
-}}
+      child: Center(
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? AppColors.primaryNormal : Colors.black,
+            fontSize: 14,
+            fontFamily: 'Poppins',
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            height: 1.0,
+          ),
+        ),
+      ),
+    );
+  }
+}

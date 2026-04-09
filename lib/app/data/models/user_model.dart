@@ -20,9 +20,12 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    final data = (json['data'] as Map<String, dynamic>?) ?? {};
-    final user = (data['user'] as Map<String, dynamic>?) ?? {};
-
+    final Map<String, dynamic> data = json['data'] is Map<String, dynamic>
+        ? json['data']
+        : json;
+    final Map<String, dynamic> user = data['user'] is Map<String, dynamic>
+        ? data['user']
+        : data;
     final dynamic rawId = user['id'];
     final int parsedId = rawId is int
         ? rawId

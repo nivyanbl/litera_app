@@ -45,17 +45,29 @@ class ProfileController extends GetxController {
 
   // ── Methods ────────────────────────────────────────────
 
-  Future<void> fetchProfile() async {
-    isLoading.value = true;
+  Future<void> fetchProfile({bool showLoading = true}) async {
+    if (showLoading) {
+      isLoading.value = true;
+    }
     errorMessage.value = '';
     try {
       final data = await repository.fetchProfile();
       user.value = data;
       _populateFormFields(data);
     } catch (e) {
-      errorMessage.value = e.toString();
+      if (user.value == null) {
+        errorMessage.value = e.toString();
+      } else {
+        Get.snackbar(
+          'Gagal',
+          'Gagal memuat profil: ${e.toString()}',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
     } finally {
-      isLoading.value = false;
+      if (showLoading) {
+        isLoading.value = false;
+      }
     }
   }
 
@@ -81,7 +93,7 @@ class ProfileController extends GetxController {
         selectedImagePath.value.isNotEmpty ? selectedImagePath.value : null,
       );
       if (success) {
-        await fetchProfile();
+        await fetchProfile(showLoading: false);
         Get.back();
         Get.snackbar(
           'Berhasil',
@@ -125,13 +137,11 @@ class ProfileController extends GetxController {
   // ── Helpers ────────────────────────────────────────────
   String get displayName => user.value?.name ?? '';
   String get displayEmail => user.value?.email ?? '';
-  String get displayPhone =>
-      (user.value?.phoneNumber.isNotEmpty ?? false)
-          ? user.value!.phoneNumber
-          : 'Belum Terisi';
-  String get displayBirthDate =>
-      (user.value?.birthDate.isNotEmpty ?? false)
-          ? user.value!.birthDate
-          : 'Belum Terisi';
+  String get displayPhone => (user.value?.phoneNumber.isNotEmpty ?? false)
+      ? user.value!.phoneNumber
+      : 'Belum Terisi';
+  String get displayBirthDate => (user.value?.birthDate.isNotEmpty ?? false)
+      ? user.value!.birthDate
+      : 'Belum Terisi';
   String get displayProfilePicture => user.value?.profilePicture ?? '';
 }
