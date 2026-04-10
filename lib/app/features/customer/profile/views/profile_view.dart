@@ -237,7 +237,7 @@ class _ProfileAvatar extends StatelessWidget {
   }
 }
 
-// ── Error State ─────────────────────────────────────────────────────────────
+// ── Error State 
 
 class _ErrorState extends StatelessWidget {
   const _ErrorState({required this.message, required this.onRetry});
