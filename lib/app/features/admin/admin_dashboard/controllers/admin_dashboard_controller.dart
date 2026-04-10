@@ -11,7 +11,6 @@ class AdminDashboardController extends GetxController {
   final Rx<DashboardModel?> dashboardData = Rx<DashboardModel?>(null);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
-  final RxInt bottomNavIndex = 0.obs;
 
   // ─── Derived chart data ──────────────────────────────────────────────────────
   final RxList<String> chartLabels = <String>[].obs;
@@ -33,21 +32,6 @@ class AdminDashboardController extends GetxController {
     if (selectedDays.value == days) return;
     selectedDays.value = days;
     fetchDashboardData();
-  }
-
-  void selectBottomNav(int index) {
-    bottomNavIndex.value = index;
-    // Handle navigation based on index
-    switch (index) {
-      case 0:
-        // Dashboard - stay on this page
-        Get.offNamed('/admin-dashboard');
-        break;
-      case 1:
-        // Orders - navigate to Product List
-        Get.toNamed('/admin-produk');
-        break;
-    }
   }
 
   Future<void> fetchDashboardData() async {

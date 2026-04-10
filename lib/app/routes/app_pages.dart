@@ -3,6 +3,8 @@ import 'package:litera/app/features/admin/admin_produk/views/product_list_view.d
 
 import '../features/admin/admin_dashboard/bindings/admin_dashboard_binding.dart';
 import '../features/admin/admin_dashboard/views/admin_dashboard_view.dart';
+import '../features/admin/admin_orders/bindings/admin_orders_binding.dart';
+import '../features/admin/admin_orders/views/admin_orders_view.dart';
 import '../features/customer/book_access/bindings/book_access_binding.dart';
 import '../features/customer/book_access/views/book_access_view.dart';
 import '../features/customer/cart/bindings/cart_binding.dart';
@@ -87,6 +89,11 @@ class AppPages {
       name: _Paths.adminProduk,
       page: () => const ProductListView(),
       binding: AdminProdukBinding(),
+    ),
+    GetPage(
+      name: _Paths.adminOrders,
+      page: () => const AdminOrdersView(),
+      binding: AdminOrdersBinding(),
     ),
   ];
 }

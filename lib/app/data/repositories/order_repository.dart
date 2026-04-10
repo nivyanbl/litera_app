@@ -9,4 +9,14 @@ class OrderRepository {
   Future<List<OrderModel>> getOrders() async {
     return await orderProvider.getOrders();
   }
+
+  Future<AdminOrdersPagedResult> getAdminOrdersPaginated({
+    required int page,
+    int perPage = 10,
+  }) async {
+    return await orderProvider.getAdminOrdersPaginated(
+      page: page,
+      perPage: perPage,
+    );
+  }
 }

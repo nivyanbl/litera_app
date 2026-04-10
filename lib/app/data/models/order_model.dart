@@ -1,5 +1,19 @@
 import 'package:intl/intl.dart';
 
+class OrderUserModel {
+  String? name;
+  String? email;
+
+  OrderUserModel({this.name, this.email});
+
+  factory OrderUserModel.fromJson(Map<String, dynamic> json) {
+    return OrderUserModel(
+      name: json['name']?.toString() ?? json['username']?.toString(),
+      email: json['email']?.toString(),
+    );
+  }
+}
+
 class OrderModel {
   static const _unknownPaymentMethodLabel = 'Metode Tidak Diketahui';
   static final _displayDateFormatter = DateFormat(
@@ -17,6 +31,7 @@ class OrderModel {
   String? paidAt;
   String? createdAt;
   List<OrderDetailModel>? details;
+  OrderUserModel? user;
 
   OrderModel({
     this.id,
@@ -29,6 +44,7 @@ class OrderModel {
     this.paidAt,
     this.createdAt,
     this.details,
+    this.user,
   });
 
   OrderDetailModel? get firstDetail =>
@@ -105,6 +121,9 @@ class OrderModel {
                 .whereType<Map<String, dynamic>>()
                 .map(OrderDetailModel.fromJson)
                 .toList()
+          : null,
+      user: json['user'] != null
+          ? OrderUserModel.fromJson(json['user'])
           : null,
     );
   }

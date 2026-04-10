@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:litera/app/core/widgets/custom_app_bar.dart';
 import 'package:litera/app/core/widgets/custom_button.dart';
+import 'package:litera/app/core/widgets/admin_bottom_nav_bar.dart';
 import 'package:litera/app/features/admin/admin_produk/controllers/admin_produk_controller.dart';
 import '../widgets/product_filter_section.dart';
 import '../widgets/product_card.dart';
@@ -93,6 +94,7 @@ class ProductListView extends GetView<AdminProdukController> {
           ),
         ],
       ),
+      bottomNavigationBar: const AdminBottomNavBar(),
     );
   }
 }
