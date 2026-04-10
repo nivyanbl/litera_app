@@ -1,46 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../features/admin/admin_dashboard/controllers/admin_dashboard_controller.dart';
 
-class AdminBottomNavBar extends StatelessWidget {
+class AdminBottomNavBar extends StatefulWidget {
   const AdminBottomNavBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<AdminDashboardController>();
+  State<AdminBottomNavBar> createState() => _AdminBottomNavBarState();
+}
 
-    return Obx(
-      () => Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(
-                  icon: Icons.dashboard_rounded,
-                  label: 'Dashboard',
-                  isActive: controller.bottomNavIndex.value == 0,
-                  onTap: () => controller.selectBottomNav(0),
-                ),
-                _buildNavItem(
-                  icon: Icons.shopping_cart_rounded,
-                  label: 'Orders',
-                  isActive: controller.bottomNavIndex.value == 1,
-                  onTap: () => controller.selectBottomNav(1),
-                ),
-              ],
-            ),
+class _AdminBottomNavBarState extends State<AdminBottomNavBar> {
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateSelectedIndex();
+  }
+
+  void _updateSelectedIndex() {
+    final currentRoute = Get.currentRoute;
+    if (currentRoute.contains('admin-orders')) {
+      _selectedIndex = 1;
+    } else if (currentRoute.contains('admin-produk')) {
+      _selectedIndex = 2;
+    } else {
+      _selectedIndex = 0;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, -4),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(
+                icon: Icons.dashboard_rounded,
+                label: 'Dashboard',
+                isActive: _selectedIndex == 0,
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 0;
+                  });
+                  Get.offNamed('/admin-dashboard');
+                },
+              ),
+              _buildNavItem(
+                icon: Icons.shopping_cart_rounded,
+                label: 'Orders',
+                isActive: _selectedIndex == 1,
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                  Get.offNamed('/admin-orders');
+                },
+              ),
+              _buildNavItem(
+                icon: Icons.inventory_2_rounded,
+                label: 'Produk',
+                isActive: _selectedIndex == 2,
+                onTap: () {
+                  setState(() {
+                    _selectedIndex = 2;
+                  });
+                  Get.offNamed('/admin-produk');
+                },
+              ),
+            ],
           ),
         ),
       ),

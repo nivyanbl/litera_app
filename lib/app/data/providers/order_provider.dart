@@ -1,6 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:litera/app/core/network/api_client.dart';
 import 'package:litera/app/data/models/order_model.dart';
+import 'package:litera/app/data/models/pagination_meta_model.dart';
+
+class AdminOrdersPagedResult {
+  final List<OrderModel> orders;
+  final PaginationMetaModel meta;
+
+  AdminOrdersPagedResult({
+    required this.orders,
+    required this.meta,
+  });
+}
 
 class OrderProvider {
   final ApiClient apiClient;
@@ -48,5 +59,53 @@ class OrderProvider {
     }
 
     return orders;
+  }
+
+  /// Get paginated admin orders
+  Future<AdminOrdersPagedResult> getAdminOrdersPaginated({
+    required int page,
+    int perPage = 10,
+  }) async {
+    final response = await apiClient.get(
+      '/admin/orders',
+      queryParameters: {
+        'page': page,
+        'per_page': perPage,
+      },
+    );
+
+    if (response.data == null) {
+      return AdminOrdersPagedResult(
+        orders: [],
+        meta: PaginationMetaModel.fromJson({}),
+      );
+    }
+
+    // Parse orders
+    final data = response.data['data'] ?? [];
+    if (data is! List) {
+      return AdminOrdersPagedResult(
+        orders: [],
+        meta: PaginationMetaModel.fromJson(response.data['meta'] ?? {}),
+      );
+    }
+
+    final orders = <OrderModel>[];
+    for (final entry in data) {
+      if (entry is! Map<String, dynamic>) continue;
+
+      final order = OrderModel.fromJson(entry);
+      orders.add(order);
+      _logUnknownPaymentMethod(order, entry);
+      _logOrderDetailCount(order, entry);
+    }
+
+    // Parse meta
+    final meta = PaginationMetaModel.fromJson(response.data['meta'] ?? {});
+
+    return AdminOrdersPagedResult(
+      orders: orders,
+      meta: meta,
+    );
   }
 }

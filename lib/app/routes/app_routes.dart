@@ -14,6 +14,7 @@
     static const profile = _Paths.profile;
     static const adminDashboard = _Paths.adminDashboard;
     static const adminProduk = _Paths.adminProduk;
+    static const adminOrders = _Paths.adminOrders;
   }
 
   abstract class _Paths {
@@ -30,4 +31,5 @@
     static const profile = '/profile';
     static const adminDashboard = '/admin-dashboard';
     static const adminProduk = '/admin-produk';
+    static const adminOrders = '/admin-orders';
   }
