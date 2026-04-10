@@ -22,14 +22,18 @@ class CartView extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Keranjang', showRightIcon: true),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return ShimmerBookList(itemCount: 5, direction: Axis.vertical);
-        }
-        return controller.cartList.isEmpty
-            ? _buildEmptyState()
-            : _buildCartList();
-      }),
+      body: RefreshIndicator(
+        onRefresh: () => controller.fetchCarts(),
+        color: AppColors.primaryNormal,
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return ShimmerBookList(itemCount: 5, direction: Axis.vertical);
+          }
+          return controller.cartList.isEmpty
+              ? _buildEmptyState()
+              : _buildCartList();
+        }),
+      ),
       bottomNavigationBar: _buildBottomBar(),
     );
   }
@@ -209,36 +213,41 @@ class CartView extends GetView<CartController> {
 
   // Empty State
   Widget _buildEmptyState() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/cart.png',
-            width: 150,
-            fit: BoxFit.contain,
-          ),
-          const SizedBox(height: 24),
-          Text(
-            'Keranjang masih kosong',
-            style: AppTextStyles.headlineSmall.copyWith(
-              fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 80),
+            Image.asset(
+              'assets/images/cart.png',
+              width: 150,
+              fit: BoxFit.contain,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Yuk temukan buku yang kamu suka!',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
-          ),
-          const SizedBox(height: 32),
-          CustomButton(
-            text: 'Mulai Belanja',
-            isLoading: false,
-            onPressed: () => Get.toNamed(Routes.home),
-          ),
-        ],
+            const SizedBox(height: 24),
+            Text(
+              'Keranjang masih kosong',
+              style: AppTextStyles.headlineSmall.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Yuk temukan buku yang kamu suka!',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+            ),
+            const SizedBox(height: 32),
+            CustomButton(
+              text: 'Mulai Belanja',
+              isLoading: false,
+              onPressed: () => Get.toNamed(Routes.home),
+            ),
+            const SizedBox(height: 80),
+          ],
+        ),
       ),
     );
   }

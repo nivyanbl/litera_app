@@ -471,13 +471,18 @@ class _ProductFormViewState extends State<ProductFormView> {
         ? selectedCategoryId
         : null;
 
-    return CustomDropdownField<int>(
-      hintText: 'Category',
+    return DropdownButtonFormField<int>(
       value: validValue,
       items: controller.categories.map((CategoryModel category) {
         return DropdownMenuItem<int>(
           value: category.id,
-          child: Text(category.name),
+          child: Text(
+            category.name,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.grayDarker,
+            ),
+          ),
         );
       }).toList(),
       onChanged: (value) {
@@ -489,7 +494,37 @@ class _ProductFormViewState extends State<ProductFormView> {
         if (value == null || value == 0) return 'Category is required';
         return null;
       },
-      isRequired: true,
+      decoration: InputDecoration(
+        hintText: 'Category',
+        hintStyle: const TextStyle(fontSize: 14, color: AppColors.grayNormal),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade500),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade500),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: AppColors.primaryNormal,
+            width: 1.5,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
+      ),
+      style: const TextStyle(
+        fontSize: 14,
+        color: AppColors.grayDarker,
+      ),
+      isExpanded: true,
     );
   }
 
@@ -524,10 +559,36 @@ class _ProductFormViewState extends State<ProductFormView> {
         }
         return null;
       },
-      decoration: _inputDecoration('Published At').copyWith(
+      style: const TextStyle(fontSize: 14, color: AppColors.grayDarker),
+      cursorColor: AppColors.primaryNormal,
+      decoration: InputDecoration(
+        hintText: 'Published At',
+        hintStyle: const TextStyle(fontSize: 14, color: AppColors.grayNormal),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade500),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade500),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: AppColors.primaryNormal,
+            width: 1.5,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red),
+        ),
         suffixIcon: IconButton(
           onPressed: _pickPublishedDate,
-          icon: const Icon(Icons.calendar_month_outlined),
+          icon: const Icon(Icons.calendar_month_outlined, color: AppColors.grayNormal),
         ),
       ),
     );
