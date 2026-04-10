@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../data/repositories/auth_repository.dart';
 import '../../../routes/app_pages.dart';
+import '../../../core/services/auth_service.dart';
 
 class LoginController extends GetxController {
   final AuthRepository authRepository;
+  final AuthService _authService = AuthService();
+
   LoginController(this.authRepository);
 
   final emailC = TextEditingController();
@@ -44,10 +47,6 @@ class LoginController extends GetxController {
     emailError.value = null;
     passwordError.value = null;
 
-    final args = Get.arguments as Map?;
-    final redirect = args?['redirect'] as String?;
-    final redirectArgs = args?['redirectArgs'];
-
     bool isValid = true;
     final email = emailC.text.trim();
     final password = passwordC.text;
@@ -68,19 +67,24 @@ class LoginController extends GetxController {
     if (!isValid) return;
 
     isLoading.value = true;
-   try {
+    try {
       final user = await authRepository.login(email, password);
 
+      // Simpan auth info
+      await _authService.saveLoginInfo(user.name, user.role);
+
+      print(
+        '🔍 Login Response - User Role: "${user.role}" | User Name: "${user.name}"',
+      );
+
       if (user.role == 'admin') {
+        print('✅ Admin detected! Navigating to dashboard...');
         Get.offAllNamed(Routes.adminDashboard);
         return;
       }
-      if (redirect != null && redirect.isNotEmpty) {
-        Get.offNamed(redirect, arguments: redirectArgs);
-        return;
-      }
 
-      Get.offAllNamed(Routes.home);
+      print('ℹ️ Regular user detected. Navigating to profile...');
+      Get.offAllNamed(Routes.profile);
     } catch (e) {
       final message = e.toString().replaceFirst('Exception: ', '');
       final lower = message.toLowerCase();
@@ -92,8 +96,8 @@ class LoginController extends GetxController {
       } else {
         Get.snackbar("Gagal", message);
       }
-      } finally {
-        isLoading.value = false;
-      }
+    } finally {
+      isLoading.value = false;
     }
   }
+}
