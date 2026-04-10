@@ -1,51 +1,110 @@
-# Litera - Book Management Admin Dashboard
+# Litera - Book Management Platform
 
 A modern Flutter application for managing book products, categories, and inventory through an intuitive admin dashboard. Built with Material 3 design principles and GetX state management for seamless user experience.
 
 ## Overview
 
-Litera is an admin dashboard application designed to streamline book product management. It provides a comprehensive interface for managing product catalogs, handling file uploads (images and PDFs), inventory tracking, and category organization with real-time updates and form validation.
+Litera is a comprehensive book management platform that provides separate interfaces for administrators and users. The application enables efficient product management, inventory tracking, file handling, and catalog organization with real-time updates and robust form validation.
 
 ## Features
 
+### 👨‍💼 Admin Features
+
 - **Product Management**
   - Create, read, update, and delete book products
-  - Detailed product forms with multi-field validation
+  - Detailed product forms with comprehensive field validation
   - Real-time inventory tracking
-  - Category-based organization
+  - Category-based product organization
 
 - **File Management**
-  - Upload and manage product cover images (JPG, PNG)
-  - PDF file upload and replacement for book content
-  - File size validation and warnings
+  - Upload and manage product cover images (JPG, PNG, max 2 MB)
+  - PDF file upload for book content (max 10 MB recommended)
+  - File size validation and user warnings
   - Preview functionality for uploaded files
 
-- **Admin Dashboard**
-  - Product listing with search and filter capabilities
-  - Advanced filtering by category and stock status
-  - Sorting options for better data organization
-  - Visual product cards with quick actions
+- **Dashboard & Analytics**
+  - Product listing with advanced search capabilities
+  - Filtering by category and stock status
+  - Multiple sorting options for better data organization
+  - Visual product cards with quick action buttons
 
-- **UI/UX**
-  - Material 3 design system with consistent styling
-  - Responsive layout optimized for mobile
-  - Clean, modern form interfaces with proper validation
-  - Intuitive navigation and action buttons
+- **Inventory Control**
+  - Monitor stock levels in real-time
+  - Update pricing and availability
+  - Track product categories
+  - Manage publication details and metadata
 
-- **Data Management**
-  - Form validation for required fields
-  - Currency formatting for pricing (Rupiah support)
-  - Date picker for publication dates
-  - Dropdown selection for categories
+### 👤 User Features
+
+- **Browse Catalog** _(when user module is enabled)_
+  - View available book products
+  - Filter and search functionality
+  - Product details and information
+  - User account management
+
+---
+
+## User Roles
+
+### 👨‍💼 Admin
+
+Administrators have full control over the platform:
+
+- **Manage Products**: Create, edit, and delete book listings
+- **Handle Files**: Upload images and PDF content
+- **Control Inventory**: Track and update stock levels
+- **Organize Content**: Manage categories and product metadata
+- **Access Analytics**: View product and inventory information
+
+### 👤 User
+
+Users interact with the platform as customers (when enabled):
+
+- **Browse Products**: View available books
+- **Search & Filter**: Find books by category or keywords
+- **View Details**: Access complete product information
+- **Account Management**: Manage user profile and preferences
+
+---
+
+## User Journey
+
+### Step-by-Step User Flow
+
+1. **Login**
+   - Enter email and password
+   - Access user dashboard
+
+2. **Browse Books**
+   - View catalog with all available books
+   - See book covers, titles, and basic info
+
+3. **Filter & Search**
+   - Filter by category, author, or price
+   - Search for specific books or keywords
+   - Sort by newest, popular, or price
+
+4. **View Book Details**
+   - Click on a book to see full details
+   - Read description, author info, and reviews
+   - Check availability and pricing
+
+5. **Manage Account**
+   - Update profile information
+   - Change password
+   - View order/wishlist history
+   - Manage preferences
+
+---
 
 ## Tech Stack
 
-- **Framework**: Flutter 3.x+
-- **State Management**: GetX
+- **Framework**: Flutter 3.13+
+- **State Management**: GetX 4.6+
 - **Design System**: Material 3
-- **Local Database**: SharedPreferences (caching)
-- **File Handling**: file_picker, image_picker
-- **Date/Time**: intl
+- **Local Storage**: SharedPreferences 2.2+
+- **File Handling**: file_picker 6.1+, image_picker 1.0+
+- **Date/Time**: intl 0.19+
 - **Build System**: Gradle (Android), CocoaPods (iOS)
 
 ## Setup Instructions
@@ -63,7 +122,7 @@ Litera is an admin dashboard application designed to streamline book product man
 1. **Clone the repository**
 
    ```bash
-   git clone <https://github.com/nivyanbl/litera_app.git>
+   git clone https://github.com/nivyanbl/litera_app.git
    cd litera_app
    ```
 
@@ -111,100 +170,59 @@ Litera is an admin dashboard application designed to streamline book product man
    flutter build ios --release
    ```
 
-## Project Structure
+## Demo Accounts
+
+### 👨‍💼 Admin Account
+
+Use these credentials to access the admin dashboard:
 
 ```
-litera_app/
-├── lib/
-│   ├── app/
-│   │   ├── core/              # Core utilities, theme, widgets
-│   │   │   ├── theme/         # AppColors, AppTheme
-│   │   │   └── widgets/       # CustomAppBar, CustomButton, CustomTextField
-│   │   ├── data/              # Models and API integration
-│   │   │   └── models/        # CategoryModel, ProductModel
-│   │   ├── features/
-│   │   │   ├── admin/         # Admin-specific features
-│   │   │   │   ├── admin_dashboard/
-│   │   │   │   ├── admin_produk/  # Product management views & controllers
-│   │   │   │   │   ├── views/
-│   │   │   │   │   ├── controllers/
-│   │   │   │   │   └── widgets/
-│   │   │   └── ...
-│   │   └── main.dart          # App entry point
-│   ├── assets/                # Images, fonts, static files
-│   └── pubspec.yaml          # Dependencies and configuration
-├── android/                   # Android-specific code
-├── ios/                       # iOS-specific code
-├── web/                       # Web platform code (if applicable)
-└── README.md
+Email:    bos@litera.com
+Password: litera123
 ```
 
-## Admin Access
-
-Use the credentials below to access the admin dashboard:
-
-| Field        | Value            |
+| Field        | Credential       |
 | ------------ | ---------------- |
 | **Email**    | `bos@litera.com` |
 | **Password** | `litera123`      |
 
-Or copy from the code block:
+### 👤 User Account
+
+Use these credentials to access the user/customer interface:
 
 ```
-Email: bos@litera.com
-Password: litera123
+Email:    user@litera.com
+Password: user123
 ```
 
-## Code Quality & Standards
+| Field        | Credential        |
+| ------------ | ----------------- |
+| **Email**    | `user@litera.com` |
+| **Password** | `user123`         |
 
-- **Architecture**: Clean architecture with clear separation of concerns
-- **State Management**: GetX for reactive state management
-- **Design System**: Consistent use of AppColors and Material 3 components
-- **Validation**: Form validation on all user inputs
-- **Error Handling**: Proper error messages and user feedback
+---
 
-## Common Commands
-
-| Command               | Description              |
-| --------------------- | ------------------------ |
-| `flutter pub get`     | Install dependencies     |
-| `flutter pub upgrade` | Upgrade dependencies     |
-| `flutter clean`       | Clean build artifacts    |
-| `flutter analyze`     | Analyze code for issues  |
-| `flutter format .`    | Format code to standards |
 
 ## Important Notes
 
-- **File Upload Limits**
-  - Images: Maximum 2 MB
-  - PDFs: Recommended max 10 MB
-  - Validation occurs on file selection
+### File Upload Limits
 
-- **Form Validation**
-  - All marked fields (\*) are required
-  - Price must be a positive number
-  - PDF is required for new products
-  - Category selection is mandatory
+- **Images**: Maximum 2 MB (JPG, PNG formats)
+- **PDFs**: Recommended maximum 10 MB
+- **Validation**: Occurs automatically on file selection
 
-- **Localization**
-  - Date format: `dd MMM yyyy` (Indonesian locale)
-  - Currency format: Indonesian Rupiah (Rp)
+### Form Validation
 
-- **Dependencies**
-  - Ensure Flutter SDK is up to date
-  - Clear cache if encountering build issues: `flutter clean && flutter pub get`
-  - Run `flutter pub upgrade` periodically to stay current
+- All fields marked with `*` are required
+- Price must be a positive number in Rupiah format
+- PDF file is mandatory for new products
+- Category selection is required for all products
 
-## Troubleshooting
+### Localization & Formatting
 
-- **Build Errors**: Run `flutter clean` followed by `flutter pub get`
-- **Hot Reload Issues**: Use `flutter run` instead of hot reload for complex state changes
-- **File Upload Not Working**: Check Android and iOS file permissions in native configuration
-- **Form Validation Not Showing**: Ensure Form key is passed to all form-based widgets
-
-## Support & Contribution
-
-For issues, questions, or contributions, please contact the development team or submit a pull request.
+- **Date Format**: `dd MMM yyyy` (Indonesian locale)
+- **Currency**: Indonesian Rupiah (Rp)
+- **Language**: Indonesian
 
 ---
 
